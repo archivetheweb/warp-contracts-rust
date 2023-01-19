@@ -1,5 +1,7 @@
-use warp_pst::{
-    action::{ActionResult, ArchiveRequestsFor, HandlerResult, ReadResponse},
+use atw::{
+    action::{
+        ActionResult, ArchiveRequestsFor, ArchiveRequestsForResult, HandlerResult, ReadResponse,
+    },
     state::State,
 };
 
@@ -18,6 +20,10 @@ impl Actionable for ArchiveRequestsFor {
             })
             .collect();
 
-        Ok(HandlerResult::Read(ReadResponse::ArchiveRequests(arcs)))
+        Ok(HandlerResult::Read(ReadResponse::ArchiveRequestsResult(
+            ArchiveRequestsForResult {
+                archives_requests: arcs,
+            },
+        )))
     }
 }

@@ -5,13 +5,52 @@
  * and run json-schema-to-typescript to regenerate this file.
  */
 
-export type View = Balance | BalanceResult;
+export type View =
+  | ArchivesByURL
+  | ArchivesByURLResult
+  | ArchiveRequestsFor
+  | ArchiveRequestsForResult
+  | ArchiveRequestByID
+  | ArchiveRequestByIDResult;
 
-export interface Balance {
-  target: string;
+export interface ArchivesByURL {
+  count: number;
+  url: string;
 }
-export interface BalanceResult {
-  balance: number;
-  target: string;
-  ticker: string;
+export interface ArchivesByURLResult {
+  archives: ArchiveSubmission[];
+}
+export interface ArchiveSubmission {
+  archivingRequestId: string;
+  arweaveTx: string;
+  fullUrl: string;
+  info: CrawlOptions;
+  size: number;
+  timestamp: number;
+  uploaderAddress: string;
+}
+export interface CrawlOptions {
+  depth: number;
+  domainOnly: boolean;
+  urls: string[];
+}
+export interface ArchiveRequestsFor {
+  address: string;
+}
+export interface ArchiveRequestsForResult {
+  archivesRequests: ArchiveRequest[];
+}
+export interface ArchiveRequest {
+  crawlOptions: CrawlOptions;
+  endTimestamp: number;
+  frequency: string;
+  requestedBy: string;
+  startTimestamp: number;
+  uploaderAddress: string;
+}
+export interface ArchiveRequestByID {
+  archiveId: string;
+}
+export interface ArchiveRequestByIDResult {
+  archivesRequest?: ArchiveRequest | null;
 }

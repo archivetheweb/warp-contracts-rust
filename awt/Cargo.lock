@@ -24,6 +24,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "atw"
+version = "0.1.0"
+dependencies = [
+ "rand",
+ "schemars",
+ "serde",
+ "serde_json",
+ "strum",
+ "strum_macros",
+ "tokio-test",
+]
+
+[[package]]
 name = "autocfg"
 version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -355,19 +368,6 @@ name = "unicode-xid"
 version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fc72304796d0818e357ead4e000d19c9c174ab23dc11093ac919054d20a6a7fc"
-
-[[package]]
-name = "warp_pst"
-version = "0.1.0"
-dependencies = [
- "rand",
- "schemars",
- "serde",
- "serde_json",
- "strum",
- "strum_macros",
- "tokio-test",
-]
 
 [[package]]
 name = "wasi"

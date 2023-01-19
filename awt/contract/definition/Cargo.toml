@@ -1,5 +1,5 @@
 [package]
-name = "warp_pst"
+name = "atw"
 version = "0.1.0"
 edition = "2021"
 description = "Warp PST template"

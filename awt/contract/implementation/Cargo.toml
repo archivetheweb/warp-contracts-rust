@@ -1,5 +1,5 @@
 [package]
-name = "warp_pst_implementation"
+name = "atw_implementation"
 version = "0.1.0"
 edition = "2021"
 
@@ -7,7 +7,7 @@ edition = "2021"
 crate-type = ["cdylib"]
 
 [dependencies]
-warp_pst = { path = "../definition" }
+atw = { path = "../definition" }
 warp_wasm_utils = { path = "../../../shared" }
 wasm-bindgen = { version = "=0.2.79", features = ["serde-serialize"] }
 wasm-bindgen-futures = { version = "0.4.29" }

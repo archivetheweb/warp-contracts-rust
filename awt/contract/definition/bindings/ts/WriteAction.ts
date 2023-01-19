@@ -5,20 +5,35 @@
  * and run json-schema-to-typescript to regenerate this file.
  */
 
-export type WriteAction = Transfer | Evolve | ForeignRead | ForeignWrite;
+export type WriteAction = RegisterUploader | RequestArchiving | SubmitArchive | DeleteArchiveRequest | Evolve;
 
-export interface Transfer {
-  qty: number;
-  target: string;
+export interface RegisterUploader {
+  friendlyName: string;
+}
+export interface RequestArchiving {
+  crawlOptions: CrawlOptions;
+  endTimestamp: number;
+  frequency: string;
+  startTimestamp: number;
+  uploaderAddress: string;
+}
+export interface CrawlOptions {
+  depth: number;
+  domainOnly: boolean;
+  urls: string[];
+}
+export interface SubmitArchive {
+  archivingRequestId: string;
+  arweaveTx: string;
+  fullUrl: string;
+  info: CrawlOptions;
+  size: number;
+  timestamp: number;
+  uploaderAddress: string;
+}
+export interface DeleteArchiveRequest {
+  archiveId: string;
 }
 export interface Evolve {
   value: string;
-}
-export interface ForeignRead {
-  contractTxId: string;
-}
-export interface ForeignWrite {
-  contractTxId: string;
-  qty: number;
-  target: string;
 }

@@ -8,12 +8,44 @@
 export type ContractState = State;
 
 export interface State {
-  balances: {
-    [k: string]: number;
+  archives: {
+    [k: string]: {
+      [k: string]: ArchiveSubmission;
+    };
+  };
+  archivingRequests: {
+    [k: string]: ArchiveRequest;
   };
   canEvolve?: boolean | null;
   evolve?: string | null;
-  name?: string | null;
   owner: string;
-  ticker: string;
+  uploaders: {
+    [k: string]: Uploader;
+  };
+}
+export interface ArchiveSubmission {
+  archivingRequestId: string;
+  arweaveTx: string;
+  fullUrl: string;
+  info: CrawlOptions;
+  size: number;
+  timestamp: number;
+  uploaderAddress: string;
+}
+export interface CrawlOptions {
+  depth: number;
+  domainOnly: boolean;
+  urls: string[];
+}
+export interface ArchiveRequest {
+  crawlOptions: CrawlOptions;
+  endTimestamp: number;
+  frequency: string;
+  requestedBy: string;
+  startTimestamp: number;
+  uploaderAddress: string;
+}
+export interface Uploader {
+  friendlyName: string;
+  uploadCount: number;
 }

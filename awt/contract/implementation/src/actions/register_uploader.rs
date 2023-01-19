@@ -1,6 +1,6 @@
-use warp_pst::action::{ActionResult, HandlerResult, RegisterUploader};
-use warp_pst::error::ContractError;
-use warp_pst::state::{State, Uploader};
+use atw::action::{ActionResult, HandlerResult, RegisterUploader};
+use atw::error::ContractError;
+use atw::state::{State, Uploader};
 use warp_wasm_utils::contract_utils::js_imports::{log, SmartWeave, Transaction};
 
 use super::Actionable;

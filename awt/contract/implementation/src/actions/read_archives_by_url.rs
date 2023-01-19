@@ -1,5 +1,5 @@
-use warp_pst::{
-    action::{ActionResult, ArchivesByURL, HandlerResult, ReadResponse},
+use atw::{
+    action::{ActionResult, ArchivesByURL, ArchivesByURLResult, HandlerResult, ReadResponse},
     state::State,
 };
 
@@ -14,6 +14,8 @@ impl Actionable for ArchivesByURL {
             None => vec![],
         };
 
-        Ok(HandlerResult::Read(ReadResponse::Archives(arcs)))
+        Ok(HandlerResult::Read(ReadResponse::ArchivesResult(
+            ArchivesByURLResult { archives: arcs },
+        )))
     }
 }

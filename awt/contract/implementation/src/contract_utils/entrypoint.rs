@@ -8,9 +8,9 @@ use serde_json::Error;
 use wasm_bindgen::prelude::*;
 
 use crate::contract;
-use warp_pst::action::{Action, HandlerResult};
-use warp_pst::error::ContractError;
-use warp_pst::state::State;
+use atw::action::{Action, HandlerResult};
+use atw::error::ContractError;
+use atw::state::State;
 
 use warp_wasm_utils::contract_utils::js_imports::log;
 

@@ -1,15 +1,9 @@
-use std::collections::HashMap;
-
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use strum_macros::EnumIter;
 
 use crate::error::ContractError;
-use crate::state::{ArchiveRequest, ArchiveSubmission, CrawlOptions, State, Uploader};
-
-// #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
-// #[serde(rename_all = "camelCase")]
-// pub struct Uploaders {}
+use crate::state::{ArchiveRequest, ArchiveSubmission, CrawlOptions, State};
 
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
 #[serde(rename_all = "camelCase")]
@@ -82,7 +76,6 @@ pub enum Action {
     ArchiveRequestByID(ArchiveRequestByID),
     ArchivesByURL(ArchivesByURL),
     ArchiveRequestsFor(ArchiveRequestsFor),
-    // Uploader(Uploaders),
     Evolve(Evolve),
 }
 
@@ -110,12 +103,6 @@ pub enum WriteAction {
     Evolve(Evolve),
 }
 
-// #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, PartialEq, Eq, Default)]
-// #[serde(rename_all = "camelCase")]
-// pub struct UploaderResult {
-//     pub uploaders: HashMap<String, Uploader>,
-// }
-
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct ArchivesByURLResult {
@@ -137,7 +124,6 @@ pub struct ArchiveRequestByIDResult {
 #[derive(JsonSchema, Clone, PartialEq, Debug, Serialize, Deserialize, Eq, EnumIter)]
 #[serde(rename_all = "camelCase", tag = "function")]
 pub enum ReadResponse {
-    // UploadersResult(UploaderResult),
     ArchivesResult(ArchivesByURLResult),
     ArchiveRequestsResult(ArchiveRequestsForResult),
     ArchiveRequestResult(ArchiveRequestByIDResult),

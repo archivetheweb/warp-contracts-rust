@@ -3,12 +3,12 @@ use async_recursion::async_recursion;
 use atw::action::{Action, ActionResult};
 use atw::state::State;
 
-use crate::actions::{Actionable, *};
-use warp_wasm_utils::contract_utils::js_imports::{log, Block, Contract, SmartWeave, Transaction};
+use crate::actions::Actionable;
+use warp_wasm_utils::contract_utils::js_imports::SmartWeave;
 
 #[async_recursion(?Send)]
 pub async fn handle(state: State, action: Action) -> ActionResult {
-    let original_caller = Transaction::owner();
+    // let original_caller = Transaction::owner();
     let effective_caller = SmartWeave::caller();
 
     //Example of accessing functions imported from js:
@@ -35,7 +35,6 @@ pub async fn handle(state: State, action: Action) -> ActionResult {
         Action::SubmitArchive(action) => action.action(effective_caller, state),
         Action::RequestArchiving(action) => action.action(effective_caller, state),
         Action::Evolve(action) => action.action(effective_caller, state),
-        // Action::Uploader(action) => action.action(effective_caller, state),
         Action::DeleteArchiveRequest(action) => action.action(effective_caller, state),
         Action::ArchivesByURL(action) => action.action(effective_caller, state),
         Action::ArchiveRequestsFor(action) => action.action(effective_caller, state),

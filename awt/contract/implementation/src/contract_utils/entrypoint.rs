@@ -12,7 +12,7 @@ use atw::action::{Action, HandlerResult};
 use atw::error::ContractError;
 use atw::state::State;
 
-use warp_wasm_utils::contract_utils::js_imports::log;
+// use warp_wasm_utils::contract_utils::js_imports::log;
 
 /*
 Note: in order do optimize communication between host and the WASM module,

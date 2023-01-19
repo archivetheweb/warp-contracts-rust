@@ -3,31 +3,31 @@ use serde::{Deserialize, Serialize};
 use strum_macros::EnumIter;
 
 use crate::error::ContractError;
-use crate::state::{State};
+use crate::state::State;
 
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct Balance {
-    pub target: String
+    pub target: String,
 }
 
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct Transfer {
     pub qty: u64,
-    pub target: String
+    pub target: String,
 }
 
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct Evolve {
-    pub value: String
+    pub value: String,
 }
 
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct ForeignRead {
-    pub contract_tx_id: String
+    pub contract_tx_id: String,
 }
 
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
@@ -46,17 +46,13 @@ pub enum Action {
     Transfer(Transfer),
 
     Evolve(Evolve),
-
-    ForeignRead(ForeignRead),
-    
-    ForeignWrite(ForeignWrite)
 }
 
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, EnumIter)]
 #[serde(rename_all = "camelCase", tag = "function")]
 pub enum View {
     Balance(Balance),
-    BalanceResult(BalanceResult)
+    BalanceResult(BalanceResult),
 }
 
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, EnumIter)]
@@ -67,8 +63,8 @@ pub enum WriteAction {
     Evolve(Evolve),
 
     ForeignRead(ForeignRead),
-    
-    ForeignWrite(ForeignWrite)
+
+    ForeignWrite(ForeignWrite),
 }
 
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
@@ -82,7 +78,7 @@ pub struct BalanceResult {
 #[derive(JsonSchema, Clone, PartialEq, Debug, Serialize, Deserialize, Hash, Eq, EnumIter)]
 #[serde(rename_all = "camelCase", tag = "function")]
 pub enum ReadResponse {
-    BalanceResult(BalanceResult)
+    BalanceResult(BalanceResult),
 }
 
 #[derive(Serialize, Deserialize)]

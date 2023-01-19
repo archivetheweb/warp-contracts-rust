@@ -4,7 +4,7 @@ use warp_pst::action::{Action, ActionResult};
 use warp_pst::state::State;
 
 use crate::actions::{Actionable, *};
-use warp_wasm_utils::contract_utils::js_imports::{Block, Contract, log, SmartWeave, Transaction};
+use warp_wasm_utils::contract_utils::js_imports::{log, Block, Contract, SmartWeave, Transaction};
 
 #[async_recursion(?Send)]
 pub async fn handle(state: State, action: Action) -> ActionResult {
@@ -34,7 +34,5 @@ pub async fn handle(state: State, action: Action) -> ActionResult {
         Action::Transfer(action) => action.action(effective_caller, state),
         Action::Balance(action) => action.action(effective_caller, state),
         Action::Evolve(action) => action.action(effective_caller, state),
-        Action::ForeignRead(action) => action.action(effective_caller, state).await,
-        Action::ForeignWrite(action) => action.action(effective_caller, state).await,
     }
 }

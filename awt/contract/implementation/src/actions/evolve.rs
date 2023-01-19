@@ -7,7 +7,7 @@ use warp_wasm_utils::contract_utils::js_imports::Transaction;
 use super::Actionable;
 
 impl Actionable for Evolve {
-    fn action(self, caller: String, mut state: State) -> ActionResult {
+    fn action(self, _caller: String, mut state: State) -> ActionResult {
         match state.can_evolve {
             Some(can_evolve) => {
                 if can_evolve && state.owner == Transaction::owner() {

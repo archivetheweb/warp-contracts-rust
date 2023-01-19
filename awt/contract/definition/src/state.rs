@@ -1,6 +1,6 @@
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
+use std::collections::{BTreeMap, HashMap};
 use strum_macros::EnumIter;
 
 #[derive(JsonSchema, Serialize, Deserialize, Clone, Default, Debug)]
@@ -12,7 +12,7 @@ pub struct State {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub can_evolve: Option<bool>,
     pub archiving_requests: HashMap<String, ArchivingRequest>,
-    pub archives: HashMap<String, HashMap<usize, ArchiveSubmission>>,
+    pub archives: BTreeMap<String, BTreeMap<usize, ArchiveSubmission>>,
     pub uploaders: HashMap<String, Uploader>,
 }
 

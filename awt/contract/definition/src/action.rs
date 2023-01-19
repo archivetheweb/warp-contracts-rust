@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 use strum_macros::EnumIter;
 
 use crate::error::ContractError;
-use crate::state::{CrawlOptions, State, Uploader};
+use crate::state::{ArchiveSubmission, CrawlOptions, State, Uploader};
 
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
 #[serde(rename_all = "camelCase")]
@@ -16,6 +16,13 @@ pub struct Balance {
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct Uploaders {}
+
+#[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
+#[serde(rename_all = "camelCase")]
+pub struct ArchivesByURL {
+    pub url: String,
+    pub count: usize,
+}
 
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
 #[serde(rename_all = "camelCase")]
@@ -47,6 +54,12 @@ pub struct SubmitArchive {
 
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
 #[serde(rename_all = "camelCase")]
+pub struct DeleteArchiveRequest {
+    pub archive_id: String,
+}
+
+#[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
+#[serde(rename_all = "camelCase")]
 pub struct Evolve {
     pub value: String,
 }
@@ -58,9 +71,9 @@ pub enum Action {
     RegisterUploader(RegisterUploader),
     RequestArchiving(RequestArchiving),
     SubmitArchive(SubmitArchive),
-    // DeleteArchiveRequest(),
+    DeleteArchiveRequest(DeleteArchiveRequest),
+    ArchivesByURL(ArchivesByURL),
     // ArchiveRequestByID(),
-    // ArchivesByURL(),
     // ArchiveRequestsFor(),
     Uploader(Uploaders),
 
@@ -72,10 +85,10 @@ pub enum Action {
 pub enum View {
     Balance(Balance),
     BalanceResult(BalanceResult),
-    // ArchivesByURL(),
     // ArchiveRequestsFor(),
     // Uploader(),
     Uploader(Uploaders),
+    ArchivesByURL(ArchivesByURL),
 }
 
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, EnumIter)]
@@ -84,6 +97,7 @@ pub enum WriteAction {
     RegisterUploader(RegisterUploader),
     RequestArchiving(RequestArchiving),
     SubmitArchive(SubmitArchive),
+    DeleteArchiveRequest(DeleteArchiveRequest),
 
     Evolve(Evolve),
 }
@@ -101,6 +115,7 @@ pub struct BalanceResult {
 pub enum ReadResponse {
     BalanceResult(BalanceResult),
     UploadersResult(HashMap<String, Uploader>),
+    Archives(Vec<ArchiveSubmission>),
 }
 
 #[derive(Serialize, Deserialize)]

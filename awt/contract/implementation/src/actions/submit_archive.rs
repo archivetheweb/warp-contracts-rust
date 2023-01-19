@@ -1,8 +1,8 @@
-use std::collections::HashMap;
+use std::collections::{BTreeMap, HashMap};
 
 use warp_pst::action::{ActionResult, HandlerResult, SubmitArchive};
 use warp_pst::error::ContractError;
-use warp_pst::state::{ArchiveSubmission, ArchivingRequest, State, Uploader};
+use warp_pst::state::{ArchiveSubmission, State};
 use warp_wasm_utils::contract_utils::js_imports::{log, SmartWeave, Transaction};
 
 use super::Actionable;
@@ -36,7 +36,7 @@ impl Actionable for SubmitArchive {
                 }
             }
             None => {
-                let mut h: HashMap<usize, ArchiveSubmission> = HashMap::new();
+                let mut h: BTreeMap<usize, ArchiveSubmission> = BTreeMap::new();
                 h.insert(self.timestamp, submission);
                 state.archives.insert(self.full_url.clone(), h);
             }

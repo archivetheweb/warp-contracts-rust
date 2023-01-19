@@ -1,6 +1,6 @@
 use warp_pst::action::{ActionResult, HandlerResult, RequestArchiving};
 use warp_pst::error::ContractError;
-use warp_pst::state::{ArchivingRequest, State};
+use warp_pst::state::{ArchiveRequest, State};
 use warp_wasm_utils::contract_utils::js_imports::{log, SmartWeave, Transaction};
 
 use super::Actionable;
@@ -19,7 +19,7 @@ impl Actionable for RequestArchiving {
 
         state.archiving_requests.insert(
             tx_id.clone(),
-            ArchivingRequest {
+            ArchiveRequest {
                 crawl_options: self.crawl_options,
                 uploader_address: self.uploader_address,
                 start_timestamp: self.start_timestamp,

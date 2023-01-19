@@ -7,6 +7,8 @@ pub mod register_uploader;
 pub mod request_archiving;
 pub mod submit_archive;
 
+pub mod read_archive_requests_by_id;
+pub mod read_archive_requests_for;
 pub mod read_archives_by_url;
 pub mod read_uploaders;
 

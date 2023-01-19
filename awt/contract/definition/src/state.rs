@@ -11,7 +11,7 @@ pub struct State {
     pub evolve: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub can_evolve: Option<bool>,
-    pub archiving_requests: HashMap<String, ArchivingRequest>,
+    pub archiving_requests: HashMap<String, ArchiveRequest>,
     pub archives: BTreeMap<String, BTreeMap<usize, ArchiveSubmission>>,
     pub uploaders: HashMap<String, Uploader>,
 }
@@ -24,7 +24,7 @@ pub enum ContractState {
 
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
 #[serde(rename_all = "camelCase")]
-pub struct ArchivingRequest {
+pub struct ArchiveRequest {
     pub crawl_options: CrawlOptions,
     pub uploader_address: String, // uploader for this pool
     pub start_timestamp: usize, // start_timestamp of the period where we want to archive the website

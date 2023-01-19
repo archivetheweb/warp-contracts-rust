@@ -31,8 +31,10 @@ pub async fn handle(state: State, action: Action) -> ActionResult {
     log(&("Vrf::randomInt()".to_owned() + &Vrf::randomInt(7).to_string()));*/
 
     match action {
-        Action::Transfer(action) => action.action(effective_caller, state),
-        Action::Balance(action) => action.action(effective_caller, state),
+        Action::RegisterUploader(action) => action.action(effective_caller, state),
+        Action::SubmitArchive(action) => action.action(effective_caller, state),
+        Action::RequestArchiving(action) => action.action(effective_caller, state),
         Action::Evolve(action) => action.action(effective_caller, state),
+        Action::Uploader(action) => action.action(effective_caller, state),
     }
 }

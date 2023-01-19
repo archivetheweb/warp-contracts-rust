@@ -5,11 +5,15 @@ use serde::{Deserialize, Serialize};
 #[serde(tag = "kind", content = "data")]
 pub enum ContractError {
     RuntimeError(String),
-    TransferAmountMustBeHigherThanZero,
-    IDontLikeThisContract,
-    CallerBalanceNotEnough(u64),
+    UploaderAlreadyAdded,
+    UploaderNotRegistered,
+
+    ChooseAnotherID,
+    ArchiveDoesNotExist,
+    ArchiveRequestNotDone,
+
+    ArchiveAlreadySubmitted,
+
     OnlyOwnerCanEvolve,
     EvolveNotAllowed,
-    WalletHasNoBalanceDefined(String)
-  }
-  
+}

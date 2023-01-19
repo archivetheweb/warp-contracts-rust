@@ -1,9 +1,11 @@
+use std::collections::HashMap;
+
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use strum_macros::EnumIter;
 
 use crate::error::ContractError;
-use crate::state::State;
+use crate::state::{CrawlOptions, State, Uploader};
 
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
 #[serde(rename_all = "camelCase")]
@@ -13,9 +15,34 @@ pub struct Balance {
 
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
 #[serde(rename_all = "camelCase")]
-pub struct Transfer {
-    pub qty: u64,
-    pub target: String,
+pub struct Uploaders {}
+
+#[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
+#[serde(rename_all = "camelCase")]
+pub struct RegisterUploader {
+    pub friendly_name: String,
+}
+
+#[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
+#[serde(rename_all = "camelCase")]
+pub struct RequestArchiving {
+    pub crawl_options: CrawlOptions,
+    pub uploader_address: String, // uploader for this pool
+    pub start_timestamp: usize, // start_timestamp of the period where we want to archive the website
+    pub end_timestamp: usize,   // end_timestamp
+    pub frequency: String,      // frequency of the archiving i.e. here it's once an hour (cron)
+}
+
+#[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
+#[serde(rename_all = "camelCase")]
+pub struct SubmitArchive {
+    pub full_url: String,   // full url
+    pub arweave_tx: String, // tx where the archive is deploy (here can add index tx too)
+    pub size: usize,
+    pub uploader_address: String,
+    pub archiving_request_id: String, // index of the archiving request
+    pub timestamp: usize,
+    pub info: CrawlOptions, // frequency of the archiving i.e. here it's once an hour (cron)
 }
 
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
@@ -24,26 +51,18 @@ pub struct Evolve {
     pub value: String,
 }
 
-#[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
-#[serde(rename_all = "camelCase")]
-pub struct ForeignRead {
-    pub contract_tx_id: String,
-}
-
-#[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
-#[serde(rename_all = "camelCase")]
-pub struct ForeignWrite {
-    pub contract_tx_id: String,
-    pub qty: u64,
-    pub target: String,
-}
-
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq)]
 #[serde(rename_all = "camelCase", tag = "function")]
 pub enum Action {
-    Balance(Balance),
-
-    Transfer(Transfer),
+    // Balance(Balance),
+    RegisterUploader(RegisterUploader),
+    RequestArchiving(RequestArchiving),
+    SubmitArchive(SubmitArchive),
+    // DeleteArchiveRequest(),
+    // ArchiveRequestByID(),
+    // ArchivesByURL(),
+    // ArchiveRequestsFor(),
+    Uploader(Uploaders),
 
     Evolve(Evolve),
 }
@@ -53,18 +72,20 @@ pub enum Action {
 pub enum View {
     Balance(Balance),
     BalanceResult(BalanceResult),
+    // ArchivesByURL(),
+    // ArchiveRequestsFor(),
+    // Uploader(),
+    Uploader(Uploaders),
 }
 
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, EnumIter)]
 #[serde(rename_all = "camelCase", tag = "function")]
 pub enum WriteAction {
-    Transfer(Transfer),
+    RegisterUploader(RegisterUploader),
+    RequestArchiving(RequestArchiving),
+    SubmitArchive(SubmitArchive),
 
     Evolve(Evolve),
-
-    ForeignRead(ForeignRead),
-
-    ForeignWrite(ForeignWrite),
 }
 
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
@@ -75,10 +96,11 @@ pub struct BalanceResult {
     pub target: String,
 }
 
-#[derive(JsonSchema, Clone, PartialEq, Debug, Serialize, Deserialize, Hash, Eq, EnumIter)]
+#[derive(JsonSchema, Clone, PartialEq, Debug, Serialize, Deserialize, Eq, EnumIter)]
 #[serde(rename_all = "camelCase", tag = "function")]
 pub enum ReadResponse {
     BalanceResult(BalanceResult),
+    UploadersResult(HashMap<String, Uploader>),
 }
 
 #[derive(Serialize, Deserialize)]

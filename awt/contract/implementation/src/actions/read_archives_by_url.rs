@@ -10,7 +10,12 @@ impl Actionable for ArchivesByURL {
         let arcs = state.archives.get(&self.url);
 
         let arcs = match arcs {
-            Some(d) => d.iter().take(self.count).map(|x| x.1.to_owned()).collect(),
+            Some(d) => d
+                .iter()
+                .rev()
+                .take(self.count)
+                .map(|x| x.1.to_owned())
+                .collect(),
             None => vec![],
         };
 

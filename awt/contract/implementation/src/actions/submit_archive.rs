@@ -17,12 +17,19 @@ impl Actionable for SubmitArchive {
             return Err(ContractError::UploaderNotRegistered);
         }
 
+        if !state
+            .archiving_requests
+            .contains_key(&self.archiving_request_id)
+        {
+            return Err(ContractError::ArchiveRequestDoesNotExist);
+        }
+
         let domain = state.archives.get_mut(&self.full_url);
         let submission = ArchiveSubmission {
             full_url: self.full_url.clone(),
             arweave_tx: self.arweave_tx,
             size: self.size,
-            uploader_address: self.uploader_address,
+            uploader_address: caller.clone(),
             archiving_request_id: self.archiving_request_id,
             timestamp: self.timestamp,
             info: self.info,

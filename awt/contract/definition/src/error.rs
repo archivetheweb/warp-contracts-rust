@@ -11,6 +11,7 @@ pub enum ContractError {
     ChooseAnotherID,
     ArchiveDoesNotExist,
     ArchiveRequestNotDone,
+    ArchiveRequestDoesNotExist,
 
     ArchiveAlreadySubmitted,
 

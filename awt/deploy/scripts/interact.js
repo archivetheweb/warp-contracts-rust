@@ -1,4 +1,4 @@
-const { loadWallet } = require('./utils/load-wallet');
+const { loadWallet, walletAddress } = require('./utils/load-wallet');
 const { connectArweave } = require('./utils/connect-arweave');
 const { connectAWTContract } = require('./utils/connect-awt-contract');
 const { contractTxId } = require('./utils/contract-tx-id');
@@ -16,7 +16,7 @@ module.exports.registerUploader = async function (host, port, protocol, target, 
   const state = await awt.currentState();
 
   console.log('Updated state:', state);
-  console.log('Contract tx id', txID);
+  console.log('Contract tx id', txId);
 
   if (target == 'testnet') {
     console.log(
@@ -30,15 +30,16 @@ module.exports.registerUploader = async function (host, port, protocol, target, 
 module.exports.requestArchiving = async function (host, port, protocol, target, walletJwk) {
   const arweave = connectArweave(host, port, protocol);
   const wallet = await loadWallet(arweave, walletJwk, target, true);
+  const walletAddr = await walletAddress(arweave, wallet);
   const txId = contractTxId(target);
   const awt = await connectAWTContract(arweave, wallet, txId, target);
 
   const txID = await awt.requestArchiving({
     crawlOptions: { depth: 0, urls: ['https://example.com'], domainOnly: false },
-    endTimestamp: 1,
-    frequency: '',
+    endTimestamp: 2,
+    frequency: 'freq',
     startTimestamp: 1,
-    uploaderAddress: '7X0gqKidieOmfMJxsCCN_l3e-gGrASRJv8T32hjqaWA'
+    uploaderAddress: walletAddr
   });
 
   await mineBlock(arweave);

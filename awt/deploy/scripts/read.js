@@ -28,3 +28,16 @@ module.exports.readArchiveRequestFor = async function (host, port, protocol, tar
 
   console.log(archiveRequestsFor);
 };
+
+module.exports.archivesByURL = async function (host, port, protocol, target, walletJwk) {
+  const arweave = connectArweave(host, port, protocol);
+  const wallet = await loadWallet(arweave, walletJwk, target, true);
+
+  const walletAddress = await arweave.wallets.jwkToAddress(wallet);
+
+  const txId = contractTxId(target);
+  const awt = await connectAWTContract(arweave, wallet, txId, target);
+  const archivesByURL = await awt.archivesByURL({ url: 'https://example.com', count: 10 });
+
+  console.log(archivesByURL);
+};

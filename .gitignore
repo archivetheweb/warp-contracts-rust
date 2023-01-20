@@ -7,4 +7,5 @@ __tests__/*.json
 .idea
 .yalc
 yalc.lock
+contract-tx-id.txt
 wallet_*.json

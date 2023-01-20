@@ -23,15 +23,20 @@
     "read:local": "ts-node deploy/local/read-contract-state-local.js",
     "read:testnet": "ts-node deploy/testnet/read-contract-state-testnet.js",
     "read:mainnet": "ts-node deploy/mainnet/read-contract-state-mainnet.js",
+
     "registerUploader:local": "ts-node deploy/local/interact-registerUploader-local.js",
     "registerUploader:testnet": "ts-node deploy/testnet/interact-registerUploader-testnet.js",
     "registerUploader:mainnet": "ts-node deploy/mainnet/interact-registerUploader-mainnet.js",
     "requestArchiving:local": "ts-node deploy/local/interact-requestArchiving-local.js",
     "requestArchiving:testnet": "ts-node deploy/testnet/interact-requestArchiving-testnet.js",
     "requestArchiving:mainnet": "ts-node deploy/mainnet/interact-requestArchiving-mainnet.js",
+
     "archiveRequestFor:local": "ts-node deploy/local/read-archiveRequestFor-local.js",
     "archiveRequestFor:testnet": "ts-node deploy/testnet/read-archiveRequestFor-testnet.js",
-    "archiveRequestFor:mainnet": "ts-node deploy/mainnet/read-archiveRequestFor-mainnet.js"
+    "archiveRequestFor:mainnet": "ts-node deploy/mainnet/read-archiveRequestFor-mainnet.js",
+    "archivesByURL:local": "ts-node deploy/local/read-archivesByURL-local.js",
+    "archivesByURL:testnet": "ts-node deploy/testnet/read-archivesByURL-testnet.js",
+    "archivesByURL:mainnet": "ts-node deploy/mainnet/read-archivesByURL-mainnet.js"
   },
   "engines": {
     "node": ">=16.5"

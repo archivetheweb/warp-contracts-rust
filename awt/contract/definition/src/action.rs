@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 use strum_macros::EnumIter;
 
 use crate::error::ContractError;
-use crate::state::{ArchiveRequest, ArchiveSubmission, CrawlOptions, State};
+use crate::state::{ArchiveOptions, ArchiveRequest, ArchiveSubmission, CrawlOptions, State};
 
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
 #[serde(rename_all = "camelCase")]
@@ -42,7 +42,7 @@ pub struct SubmitArchive {
     pub size: usize,
     pub archiving_request_id: String, // index of the archiving request
     pub timestamp: usize,
-    pub options: CrawlOptions, // frequency of the archiving i.e. here it's once an hour (cron)
+    pub options: ArchiveOptions, // frequency of the archiving i.e. here it's once an hour (cron)
 }
 
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]

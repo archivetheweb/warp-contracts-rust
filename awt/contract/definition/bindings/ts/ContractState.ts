@@ -27,15 +27,14 @@ export interface ArchiveSubmission {
   archivingRequestId: string;
   arweaveTx: string;
   fullUrl: string;
-  options: CrawlOptions;
+  options: ArchiveOptions;
   size: number;
   timestamp: number;
   uploaderAddress: string;
 }
-export interface CrawlOptions {
+export interface ArchiveOptions {
   depth: number;
   domainOnly: boolean;
-  urls: string[];
 }
 export interface ArchiveRequest {
   crawlOptions: CrawlOptions;
@@ -44,6 +43,11 @@ export interface ArchiveRequest {
   requestedBy: string;
   startTimestamp: number;
   uploaderAddress: string;
+}
+export interface CrawlOptions {
+  depth: number;
+  domainOnly: boolean;
+  urls: string[];
 }
 export interface Uploader {
   friendlyName: string;

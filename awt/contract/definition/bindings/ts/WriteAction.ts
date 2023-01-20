@@ -26,9 +26,13 @@ export interface SubmitArchive {
   archivingRequestId: string;
   arweaveTx: string;
   fullUrl: string;
-  options: CrawlOptions;
+  options: ArchiveOptions;
   size: number;
   timestamp: number;
+}
+export interface ArchiveOptions {
+  depth: number;
+  domainOnly: boolean;
 }
 export interface DeleteArchiveRequest {
   archiveId: string;

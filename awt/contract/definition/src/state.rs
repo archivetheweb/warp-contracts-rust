@@ -43,6 +43,13 @@ pub struct CrawlOptions {
 
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
 #[serde(rename_all = "camelCase")]
+pub struct ArchiveOptions {
+    pub depth: u8,         // depth of the crawl
+    pub domain_only: bool, // whether we want a domain only crawl
+}
+
+#[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
+#[serde(rename_all = "camelCase")]
 pub struct ArchiveSubmission {
     pub full_url: String,   // full url
     pub arweave_tx: String, // tx where the archive is deploy (here can add index tx too)
@@ -50,7 +57,7 @@ pub struct ArchiveSubmission {
     pub uploader_address: String,
     pub archiving_request_id: String, // index of the archiving request
     pub timestamp: usize,
-    pub options: CrawlOptions,
+    pub options: ArchiveOptions,
 }
 
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]

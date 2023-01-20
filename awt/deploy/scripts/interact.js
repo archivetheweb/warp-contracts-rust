@@ -10,20 +10,20 @@ module.exports.registerUploader = async function (host, port, protocol, target, 
   const txId = contractTxId(target);
   const awt = await connectAWTContract(arweave, wallet, txId, target);
 
-  const txID = await awt.registerUploader({ friendlyName: 'bob' });
+  const { originalTxId } = await awt.registerUploader({ friendlyName: 'bob' });
 
   await mineBlock(arweave);
   const state = await awt.currentState();
 
   console.log('Updated state:', state);
-  console.log('Contract tx id', txId);
+  console.log('Contract tx id', txID);
 
   if (target == 'testnet') {
     console.log(
-      `Check registerUploader interaction at https://sonar.warp.cc/#/app/interaction/${txID}?network=testnet`
+      `Check registerUploader interaction at https://sonar.warp.cc/#/app/interaction/${originalTxId}?network=testnet`
     );
   } else {
-    console.log('Transfer tx id', txID);
+    console.log('Transfer tx id', originalTxId);
   }
 };
 

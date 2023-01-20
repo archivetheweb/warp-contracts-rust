@@ -3,22 +3,14 @@ import fs from 'fs';
 import ArLocal from 'arlocal';
 import Arweave from 'arweave';
 import { JWKInterface } from 'arweave/node/lib/wallet';
-import {
-  InteractionResult,
-  LoggerFactory,
-  PstState,
-  Warp,
-  SmartWeaveTags,
-  WarpFactory,
-  TagsParser
-} from 'warp-contracts';
+import { InteractionResult, LoggerFactory, Warp, SmartWeaveTags, WarpFactory, TagsParser } from 'warp-contracts';
 import path from 'path';
 import { AwtContract } from '../contract/definition/bindings/ts/AwtContract';
 import { State } from '../contract/definition/bindings/ts/ContractState';
 
 jest.setTimeout(30000);
 
-describe('Testing the Profit Sharing Token', () => {
+describe('Testing the ATW Contract', () => {
   let contractSrc: Buffer;
 
   let wallet: JWKInterface;
@@ -29,10 +21,7 @@ describe('Testing the Profit Sharing Token', () => {
   let arweave: Arweave;
   let arlocal: ArLocal;
   let warp: Warp;
-  let pst: AwtContract;
-  let pst2: AwtContract;
-
-  let foreignContractTxId: string;
+  let atwContract: AwtContract;
   let contractTxId: string;
 
   let tagsParser;
@@ -40,7 +29,7 @@ describe('Testing the Profit Sharing Token', () => {
   beforeAll(async () => {
     // note: each tests suit (i.e. file with tests that Jest is running concurrently
     // with another files has to have ArLocal set to a different port!)
-    arlocal = new ArLocal(1820, false);
+    arlocal = new ArLocal(1821, false);
     await arlocal.start();
 
     tagsParser = new TagsParser();
@@ -49,7 +38,7 @@ describe('Testing the Profit Sharing Token', () => {
     LoggerFactory.INST.logLevel('debug', 'WASM:Rust');
     //LoggerFactory.INST.logLevel('debug', 'WasmContractHandlerApi');
 
-    warp = WarpFactory.forLocal(1820);
+    warp = WarpFactory.forLocal(1821);
     arweave = warp.arweave;
 
     ({ jwk: wallet, address: walletAddress } = await warp.generateWallet());
@@ -64,19 +53,25 @@ describe('Testing the Profit Sharing Token', () => {
       }
     };
 
-    // deploying contract using the new SDK.
-    ({ contractTxId } = await warp.createContract.deploy({
-      wallet,
-      initState: JSON.stringify(initialState),
-      src: contractSrc,
-      wasmSrcCodeDir: path.join(__dirname, '../contract/implementation/src'),
-      wasmGlueCode: path.join(__dirname, '../contract/implementation/pkg/rust-contract.js')
-    }));
+    try {
+      // deploying contract using the new SDK.
+      let { contractTxId: ctxID } = await warp.createContract.deploy({
+        wallet,
+        initState: JSON.stringify(initialState),
+        src: contractSrc,
+        wasmSrcCodeDir: path.join(__dirname, '../contract/implementation/src'),
+        wasmGlueCode: path.join(__dirname, '../contract/implementation/pkg/rust-contract.js')
+      });
 
-    pst = new AwtContract(contractTxId, warp);
+      contractTxId = ctxID;
 
-    // connecting wallet to the Awt contract
-    pst.connect(wallet).setEvaluationOptions({ internalWrites: true });
+      atwContract = new AwtContract(contractTxId, warp);
+
+      // connecting wallet to the Awt contract
+      atwContract.connect(wallet).setEvaluationOptions({ internalWrites: true });
+    } catch (e) {
+      console.error(e);
+    }
   });
 
   afterAll(async () => {
@@ -95,89 +90,34 @@ describe('Testing the Profit Sharing Token', () => {
     expect(tagsParser.getTag(contractSrcTx, SmartWeaveTags.WASM_LANG)).toEqual('rust');
   });
 
-  // it('should read pst state and balance data', async () => {
-  //   expect(await pst.currentState()).toEqual(initialState);
-  //   expect((await pst.balance({ target: 'uhE-QeYS8i4pmUtnxQyHD7dzXFNaJ9oMK-IM-QPNY6M' })).balance).toEqual(10000000);
-  //   expect((await pst.balance({ target: '33F0QHcb22W7LwWR1iRC8Az1ntZG09XQ03YWuw2ABqA' })).balance).toEqual(23111222);
-  //   expect((await pst.balance({ target: walletAddress })).balance).toEqual(555669);
-  // });
+  it('should register uploader', async () => {
+    await atwContract.registerUploader({ friendlyName: 'bob' });
+    const state = await atwContract.currentState();
+    expect(Object.keys(state.uploaders).length).toEqual(1);
+    expect(state.uploaders[walletAddress].friendlyName).toEqual('bob');
+  });
 
-  // it('should properly transfer tokens', async () => {
-  //   await pst.transfer({
-  //     target: 'uhE-QeYS8i4pmUtnxQyHD7dzXFNaJ9oMK-IM-QPNY6M',
-  //     qty: 555
-  //   });
+  it('should register uploader', async () => {
+    await atwContract.registerUploader({ friendlyName: 'bob' });
+    const state = await atwContract.currentState();
+    expect(Object.keys(state.uploaders).length).toEqual(1);
+    expect(state.uploaders[walletAddress].friendlyName).toEqual('bob');
+  });
 
-  //   expect((await pst.currentState()).balances[walletAddress]).toEqual(555669 - 555);
-  //   expect((await pst.currentState()).balances['uhE-QeYS8i4pmUtnxQyHD7dzXFNaJ9oMK-IM-QPNY6M']).toEqual(10000000 + 555);
-  // });
+  it('should add archiving request', async () => {
+    await atwContract.requestArchiving({
+      crawlOptions: {
+        urls: ['https://example.com'],
+        depth: 0, // depth of the crawl
+        domainOnly: false // whether we want a domain only crawl
+      },
+      uploaderAddress: walletAddress, // uploader for this pool
+      startTimestamp: Math.floor(Date.now() / 1000), // start_timestamp of the period where we want to archive the website
+      endTimestamp: Math.floor(Date.now() / 1000), // end_timestamp
+      frequency: 'cron:0 * * * * * '
+    });
+    const state = await atwContract.currentState();
 
-  // it('should properly view contract state', async () => {
-  //   const result = await pst.balance({ target: 'uhE-QeYS8i4pmUtnxQyHD7dzXFNaJ9oMK-IM-QPNY6M' });
-  //   expect(result.balance).toEqual(10000000 + 555);
-  //   expect(result.ticker).toEqual('EXAMPLE_PST_TOKEN');
-  //   expect(result.target).toEqual('uhE-QeYS8i4pmUtnxQyHD7dzXFNaJ9oMK-IM-QPNY6M');
-  // });
-
-  // // note: the dummy logic on the test contract should add 1000 tokens
-  // // to each address, if the foreign contract state 'ticker' field = 'FOREIGN_PST'
-  // it('should properly read foreign contract state', async () => {
-  //   await pst.foreignRead({
-  //     contractTxId: foreignContractTxId
-  //   });
-  //   expect((await pst.currentState()).balances[walletAddress]).toEqual(555669 - 555 + 1000);
-  //   expect((await pst.currentState()).balances['uhE-QeYS8i4pmUtnxQyHD7dzXFNaJ9oMK-IM-QPNY6M']).toEqual(
-  //     10000000 + 555 + 1000
-  //   );
-  // });
-
-  // it('should properly perform internal write', async () => {
-  //   expect((await pst2.balance({ target: 'uhE-QeYS8i4pmUtnxQyHD7dzXFNaJ9oMK-IM-QPNY6M' })).balance).toEqual(10000000);
-
-  //   await pst.foreignWrite({
-  //     contractTxId: foreignContractTxId,
-  //     target: 'uhE-QeYS8i4pmUtnxQyHD7dzXFNaJ9oMK-IM-QPNY6M',
-  //     qty: 555
-  //   });
-
-  //   expect((await pst2.balance({ target: 'uhE-QeYS8i4pmUtnxQyHD7dzXFNaJ9oMK-IM-QPNY6M' })).balance).toEqual(10000555);
-  //   expect((await pst2.balance({ target: walletAddress })).balance).toEqual(555669 - 555);
-  // });
-
-  // it("should properly evolve contract's source code", async () => {
-  //   expect((await pst.currentState()).balances[walletAddress]).toEqual(556114);
-
-  //   const newSource = fs.readFileSync(path.join(__dirname, './data/token-evolve.js'), 'utf8');
-
-  //   const srcTx = await warp.createSourceTx({ src: newSource }, wallet);
-  //   const newSrcTxId = await warp.saveSourceTx(srcTx);
-
-  //   await pst.evolve({ value: newSrcTxId });
-
-  //   // note: the evolved balance always adds 555 to the result
-  //   expect((await pst.balance({ target: walletAddress })).balance).toEqual(556114 + 555);
-  // });
-
-  // it('should properly perform dry write with overwritten caller', async () => {
-  //   const { address: overwrittenCaller } = await warp.generateWallet();
-
-  //   await pst.transfer({
-  //     target: overwrittenCaller,
-  //     qty: 1000
-  //   });
-
-  //   // note: transfer should be done from the "overwrittenCaller" address, not the "walletAddress"
-  //   const result: InteractionResult<State, unknown> = await pst.contract.dryWrite(
-  //     {
-  //       function: 'transfer',
-  //       target: 'uhE-QeYS8i4pmUtnxQyHD7dzXFNaJ9oMK-IM-QPNY6M',
-  //       qty: 333
-  //     },
-  //     overwrittenCaller
-  //   );
-
-  //   expect(result.state.balances[walletAddress]).toEqual(555114 - 1000 + 1000);
-  //   expect(result.state.balances['uhE-QeYS8i4pmUtnxQyHD7dzXFNaJ9oMK-IM-QPNY6M']).toEqual(10000000 + 1000 + 555 + 333);
-  //   expect(result.state.balances[overwrittenCaller]).toEqual(1000 - 333);
-  // });
+    expect(Object.keys(state.archivingRequests).length).toEqual(1);
+  });
 });

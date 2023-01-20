@@ -26,6 +26,9 @@
     "registerUploader:local": "ts-node deploy/local/interact-registerUploader-local.js",
     "registerUploader:testnet": "ts-node deploy/testnet/interact-registerUploader-testnet.js",
     "registerUploader:mainnet": "ts-node deploy/mainnet/interact-registerUploader-mainnet.js",
+    "requestArchiving:local": "ts-node deploy/local/interact-requestArchiving-local.js",
+    "requestArchiving:testnet": "ts-node deploy/testnet/interact-requestArchiving-testnet.js",
+    "requestArchiving:mainnet": "ts-node deploy/mainnet/interact-requestArchiving-mainnet.js",
     "archiveRequestFor:local": "ts-node deploy/local/read-archiveRequestFor-local.js",
     "archiveRequestFor:testnet": "ts-node deploy/testnet/read-archiveRequestFor-testnet.js",
     "archiveRequestFor:mainnet": "ts-node deploy/mainnet/read-archiveRequestFor-mainnet.js"

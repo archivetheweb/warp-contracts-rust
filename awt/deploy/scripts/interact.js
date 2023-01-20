@@ -38,7 +38,7 @@ module.exports.requestArchiving = async function (host, port, protocol, target, 
     endTimestamp: 1,
     frequency: '',
     startTimestamp: 1,
-    uploaderAddress: ''
+    uploaderAddress: '7X0gqKidieOmfMJxsCCN_l3e-gGrASRJv8T32hjqaWA'
   });
 
   await mineBlock(arweave);
@@ -49,7 +49,7 @@ module.exports.requestArchiving = async function (host, port, protocol, target, 
 
   if (target == 'testnet') {
     console.log(
-      `Check registerUploader interaction at https://sonar.warp.cc/#/app/interaction/${txID}?network=testnet`
+      `Check requestArchiving interaction at https://sonar.warp.cc/#/app/interaction/${txID}?network=testnet`
     );
   } else {
     console.log('Transfer tx id', txID);

@@ -34,7 +34,7 @@ module.exports.requestArchiving = async function (host, port, protocol, target, 
   const txId = contractTxId(target);
   const awt = await connectAWTContract(arweave, wallet, txId, target);
 
-  const txID = await awt.requestArchiving({
+  const { originalTxId } = await awt.requestArchiving({
     crawlOptions: { depth: 0, urls: ['https://example.com'], domainOnly: false },
     endTimestamp: 2,
     frequency: 'freq',
@@ -50,9 +50,50 @@ module.exports.requestArchiving = async function (host, port, protocol, target, 
 
   if (target == 'testnet') {
     console.log(
-      `Check requestArchiving interaction at https://sonar.warp.cc/#/app/interaction/${txID}?network=testnet`
+      `Check requestArchiving interaction at https://sonar.warp.cc/#/app/interaction/${originalTxId}?network=testnet`
     );
   } else {
-    console.log('Transfer tx id', txID);
+    console.log('Transfer tx id', originalTxId);
+  }
+};
+
+module.exports.submitArchive = async function (host, port, protocol, target, walletJwk) {
+  const arweave = connectArweave(host, port, protocol);
+  const wallet = await loadWallet(arweave, walletJwk, target, true);
+  const walletAddr = await walletAddress(arweave, wallet);
+  const txId = contractTxId(target);
+  const awt = await connectAWTContract(arweave, wallet, txId, target);
+
+  let beginState = await awt.currentState();
+
+  let key = Object.keys(beginState.archivingRequests)[0];
+  console.log(key);
+  console.log(key);
+  console.log(key);
+  console.log(key);
+  console.log(key);
+  console.log(key);
+
+  const { originalTxId } = await awt.submitArchive({
+    archivingRequestId: key,
+    arweaveTx: 'string',
+    fullUrl: 'https://example.com',
+    info: { depth: 0, urls: ['https://example.com'], domainOnly: false },
+    size: 1,
+    timestamp: 1
+  });
+
+  await mineBlock(arweave);
+  const state = await awt.currentState();
+
+  console.log('Updated state:', state);
+  console.log('Contract tx id', txId);
+
+  if (target == 'testnet') {
+    console.log(
+      `Check requestArchiving interaction at https://sonar.warp.cc/#/app/interaction/${originalTxId}?network=testnet`
+    );
+  } else {
+    console.log('Transfer tx id', originalTxId);
   }
 };

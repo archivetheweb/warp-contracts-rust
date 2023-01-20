@@ -113,4 +113,28 @@ describe('Testing the ATW Contract', () => {
 
     expect(Object.keys(state.archivingRequests).length).toEqual(1);
   });
+
+  it('should submit an archive', async () => {
+    let beginState = await atwContract.currentState();
+    let archiveRequestID = Object.keys(beginState.archivingRequests)[0];
+
+    let beginCount = Object.keys(beginState.archives).length;
+
+    await atwContract.submitArchive({
+      options: {
+        depth: 0, // depth of the crawl
+        domainOnly: false // whether we want a domain only crawl
+      },
+      arweaveTx: '',
+      fullUrl: 'https://example.com?hello=hi',
+      size: 1,
+      timestamp: 1,
+      archivingRequestId: archiveRequestID
+    });
+    const state = await atwContract.currentState();
+
+    expect(Object.keys(state.archivingRequests).length - beginCount).toEqual(1);
+
+    expect(state.archives['example.com']).toBeDefined();
+  });
 });

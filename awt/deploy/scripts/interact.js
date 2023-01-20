@@ -68,7 +68,7 @@ module.exports.submitArchive = async function (host, port, protocol, target, wal
   let key = Object.keys(beginState.archivingRequests)[0];
 
   const { originalTxId } = await awt.submitArchive({
-    archivingRequestId: key,
+    archiveRequestId: key,
     arweaveTx: 'string',
     fullUrl: 'https://example.com',
     info: { depth: 0, urls: ['https://example.com'], domainOnly: false },

@@ -111,12 +111,12 @@ describe('Testing the ATW Contract', () => {
     });
     const state = await atwContract.currentState();
 
-    expect(Object.keys(state.archivingRequests).length).toEqual(1);
+    expect(Object.keys(state.archiveRequests).length).toEqual(1);
   });
 
   it('should submit an archive', async () => {
     let beginState = await atwContract.currentState();
-    let archiveRequestID = Object.keys(beginState.archivingRequests)[0];
+    let archiveRequestID = Object.keys(beginState.archiveRequests)[0];
 
     let beginCount = Object.keys(beginState.archives).length;
     let ts = 1;
@@ -129,7 +129,7 @@ describe('Testing the ATW Contract', () => {
       fullUrl: 'https://example.com?hello=hi',
       size: 1,
       timestamp: ts,
-      archivingRequestId: archiveRequestID
+      archiveRequestId: archiveRequestID
     });
     const state = await atwContract.currentState();
 
@@ -140,7 +140,7 @@ describe('Testing the ATW Contract', () => {
 
   it('should delete an archive request', async () => {
     let beginState = await atwContract.currentState();
-    let beginCount = Object.keys(beginState.archivingRequests).length;
+    let beginCount = Object.keys(beginState.archiveRequests).length;
 
     // we create an archive request
     let { originalTxId } = await atwContract.requestArchiving({
@@ -160,6 +160,6 @@ describe('Testing the ATW Contract', () => {
     });
     const state = await atwContract.currentState();
 
-    expect(beginCount - Object.keys(state.archivingRequests).length).toEqual(0);
+    expect(beginCount - Object.keys(state.archiveRequests).length).toEqual(0);
   });
 });

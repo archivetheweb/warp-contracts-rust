@@ -29,7 +29,6 @@ export interface SubmitArchive {
   info: CrawlOptions;
   size: number;
   timestamp: number;
-  uploaderAddress: string;
 }
 export interface DeleteArchiveRequest {
   archiveId: string;

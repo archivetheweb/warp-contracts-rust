@@ -20,15 +20,15 @@
     "deploy:local": "yarn build && node deploy/local/deploy-local.js",
     "deploy:testnet": "yarn build && node deploy/testnet/deploy-test.js",
     "deploy:mainnet": "yarn build && node deploy/mainnet/deploy-mainnet.js",
-    "read:local": "node deploy/local/read-contract-state-local.js",
-    "read:testnet": "node deploy/testnet/read-contract-state-testnet.js",
-    "read:mainnet": "node deploy/mainnet/read-contract-state-mainnet.js",
-    "transfer:local": "node deploy/local/interact-transfer-local.js",
-    "transfer:testnet": "node deploy/testnet/interact-transfer-testnet.js",
-    "transfer:mainnet": "node deploy/mainnet/interact-transfer-mainnet.js",
-    "balance:local": "node deploy/local/interact-balance-local.js",
-    "balance:testnet": "node deploy/testnet/interact-balance-testnet.js",
-    "balance:mainnet": "node deploy/mainnet/interact-balance-mainnet.js"
+    "read:local": "ts-node deploy/local/read-contract-state-local.js",
+    "read:testnet": "ts-node deploy/testnet/read-contract-state-testnet.js",
+    "read:mainnet": "ts-node deploy/mainnet/read-contract-state-mainnet.js",
+    "transfer:local": "ts-node deploy/local/interact-transfer-local.js",
+    "transfer:testnet": "ts-node deploy/testnet/interact-transfer-testnet.js",
+    "transfer:mainnet": "ts-node deploy/mainnet/interact-transfer-mainnet.js",
+    "archiveRequestFor:local": "ts-node deploy/local/read-archiveRequestFor-local.js",
+    "archiveRequestFor:testnet": "ts-node deploy/testnet/read-archiveRequestFor-testnet.js",
+    "archiveRequestFor:mainnet": "ts-node deploy/mainnet/read-archiveRequestFor-mainnet.js"
   },
   "engines": {
     "node": ">=16.5"

@@ -23,7 +23,7 @@ export interface CrawlOptions {
   urls: string[];
 }
 export interface SubmitArchive {
-  archivingRequestId: string;
+  archiveRequestId: string;
   arweaveTx: string;
   fullUrl: string;
   options: ArchiveOptions;

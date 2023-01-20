@@ -8,13 +8,13 @@
 export type ContractState = State;
 
 export interface State {
+  archiveRequests: {
+    [k: string]: ArchiveRequest;
+  };
   archives: {
     [k: string]: {
       [k: string]: ArchiveSubmission;
     };
-  };
-  archivingRequests: {
-    [k: string]: ArchiveRequest;
   };
   canEvolve?: boolean | null;
   evolve?: string | null;
@@ -23,8 +23,22 @@ export interface State {
     [k: string]: Uploader;
   };
 }
+export interface ArchiveRequest {
+  crawlOptions: CrawlOptions;
+  endTimestamp: number;
+  frequency: string;
+  id: string;
+  requestedBy: string;
+  startTimestamp: number;
+  uploaderAddress: string;
+}
+export interface CrawlOptions {
+  depth: number;
+  domainOnly: boolean;
+  urls: string[];
+}
 export interface ArchiveSubmission {
-  archivingRequestId: string;
+  archiveRequestId: string;
   arweaveTx: string;
   fullUrl: string;
   options: ArchiveOptions;
@@ -35,19 +49,6 @@ export interface ArchiveSubmission {
 export interface ArchiveOptions {
   depth: number;
   domainOnly: boolean;
-}
-export interface ArchiveRequest {
-  crawlOptions: CrawlOptions;
-  endTimestamp: number;
-  frequency: string;
-  requestedBy: string;
-  startTimestamp: number;
-  uploaderAddress: string;
-}
-export interface CrawlOptions {
-  depth: number;
-  domainOnly: boolean;
-  urls: string[];
 }
 export interface Uploader {
   friendlyName: string;

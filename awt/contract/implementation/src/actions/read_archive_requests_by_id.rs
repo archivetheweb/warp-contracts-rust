@@ -11,7 +11,7 @@ impl Actionable for ArchiveRequestByID {
     fn action(self, _caller: String, state: State) -> ActionResult {
         Ok(HandlerResult::Read(ReadResponse::ArchiveRequestResult(
             ArchiveRequestByIDResult {
-                archives_request: state.archiving_requests.get(&self.archive_id).cloned(),
+                archives_request: state.archive_requests.get(&self.archive_id).cloned(),
             },
         )))
     }

@@ -40,7 +40,7 @@ pub struct SubmitArchive {
     pub full_url: String,   // full url
     pub arweave_tx: String, // tx where the archive is deploy (here can add index tx too)
     pub size: usize,
-    pub archiving_request_id: String, // index of the archiving request
+    pub archive_request_id: String, // index of the archiving request
     pub timestamp: usize,
     pub options: ArchiveOptions, // frequency of the archiving i.e. here it's once an hour (cron)
 }

@@ -10,7 +10,7 @@ use super::Actionable;
 impl Actionable for ArchiveRequestsFor {
     fn action(self, _caller: String, state: State) -> ActionResult {
         let arcs = state
-            .archiving_requests
+            .archive_requests
             .iter()
             .filter_map(|x| {
                 if x.1.uploader_address == self.address {

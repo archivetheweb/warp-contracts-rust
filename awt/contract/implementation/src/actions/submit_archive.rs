@@ -14,8 +14,8 @@ impl Actionable for SubmitArchive {
         }
 
         if !state
-            .archiving_requests
-            .contains_key(&self.archiving_request_id)
+            .archive_requests
+            .contains_key(&self.archive_request_id)
         {
             return Err(ContractError::ArchiveRequestDoesNotExist);
         }
@@ -33,7 +33,7 @@ impl Actionable for SubmitArchive {
             arweave_tx: self.arweave_tx,
             size: self.size,
             uploader_address: caller.clone(),
-            archiving_request_id: self.archiving_request_id,
+            archive_request_id: self.archive_request_id,
             timestamp: self.timestamp,
             options: self.options,
         };

@@ -9,7 +9,7 @@ impl Actionable for RequestArchiving {
     fn action(self, caller: String, mut state: State) -> ActionResult {
         let tx_id = &Transaction::id();
 
-        if state.archiving_requests.contains_key(tx_id) {
+        if state.archive_requests.contains_key(tx_id) {
             return Err(ContractError::ChooseAnotherID);
         }
 
@@ -21,9 +21,10 @@ impl Actionable for RequestArchiving {
             }
         }
 
-        state.archiving_requests.insert(
+        state.archive_requests.insert(
             tx_id.clone(),
             ArchiveRequest {
+                id: tx_id.clone(),
                 crawl_options: self.crawl_options,
                 uploader_address: self.uploader_address,
                 start_timestamp: self.start_timestamp,

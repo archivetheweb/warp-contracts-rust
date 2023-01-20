@@ -21,7 +21,7 @@ export interface ArchivesByURLResult {
   archives: ArchiveSubmission[];
 }
 export interface ArchiveSubmission {
-  archivingRequestId: string;
+  archiveRequestId: string;
   arweaveTx: string;
   fullUrl: string;
   options: ArchiveOptions;
@@ -43,6 +43,7 @@ export interface ArchiveRequest {
   crawlOptions: CrawlOptions;
   endTimestamp: number;
   frequency: string;
+  id: string;
   requestedBy: string;
   startTimestamp: number;
   uploaderAddress: string;

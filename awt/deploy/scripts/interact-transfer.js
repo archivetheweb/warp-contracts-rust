@@ -1,6 +1,6 @@
 const { loadWallet } = require('./utils/load-wallet');
 const { connectArweave } = require('./utils/connect-arweave');
-const { connectPstContract } = require('./utils/connect-pst-contract');
+const { connectAWTContract } = require('./utils/connect-awt-contract');
 const { contractTxId } = require('./utils/contract-tx-id');
 const { mineBlock } = require('./utils/mine-block');
 
@@ -8,11 +8,11 @@ module.exports.interactTransfer = async function (host, port, protocol, target, 
   const arweave = connectArweave(host, port, protocol);
   const wallet = await loadWallet(arweave, walletJwk, target, true);
   const txId = contractTxId(target);
-  const pst = await connectPstContract(arweave, wallet, txId, target);
+  const pst = await connectAWTContract(arweave, wallet, txId, target);
 
   const transferId = await pst.transfer({
     target: 'uhE-QeYS8i4pmUtnxQyHD7dzXFNaJ9oMK-IM-QPNY6M',
-    qty: 555,
+    qty: 555
   });
 
   await mineBlock(arweave);

@@ -97,13 +97,6 @@ describe('Testing the ATW Contract', () => {
     expect(state.uploaders[walletAddress].friendlyName).toEqual('bob');
   });
 
-  it('should register uploader', async () => {
-    await atwContract.registerUploader({ friendlyName: 'bob' });
-    const state = await atwContract.currentState();
-    expect(Object.keys(state.uploaders).length).toEqual(1);
-    expect(state.uploaders[walletAddress].friendlyName).toEqual('bob');
-  });
-
   it('should add archiving request', async () => {
     await atwContract.requestArchiving({
       crawlOptions: {

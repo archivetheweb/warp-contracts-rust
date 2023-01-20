@@ -16,22 +16,16 @@ module.exports.deploy = async function (host, port, protocol, target, walletJwk)
   const initialState = {
     ...stateFromFile,
     ...{
-      owner: walletAddr,
-      balances: {
-        ...stateFromFile.balances,
-        [walletAddr]: 10000000,
-      },
-    },
-  };
-  const {contractTxId} = await warp.createContract.deploy(
-    {
-      wallet,
-      initState: JSON.stringify(initialState),
-      src: contractSrc,
-      wasmSrcCodeDir: path.join(__dirname, '../../src'),
-      wasmGlueCode: path.join(__dirname, '../../contract/implementation/pkg/rust-contract.js'),
+      owner: walletAddr
     }
-  );
+  };
+  const { contractTxId } = await warp.createContract.deploy({
+    wallet,
+    initState: JSON.stringify(initialState),
+    src: contractSrc,
+    wasmSrcCodeDir: path.join(__dirname, '../../src'),
+    wasmGlueCode: path.join(__dirname, '../../contract/implementation/pkg/rust-contract.js')
+  });
   fs.writeFileSync(path.join(__dirname, `../${target}/contract-tx-id.txt`), contractTxId);
 
   if (target == 'testnet' || target == 'local') {
@@ -53,4 +47,4 @@ module.exports.getWarpInstance = function (port, target) {
   } else {
     return WarpFactory.forMainnet({ ...defaultCacheOptions, inMemory: true });
   }
-}
+};

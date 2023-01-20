@@ -26,7 +26,7 @@ export interface SubmitArchive {
   archivingRequestId: string;
   arweaveTx: string;
   fullUrl: string;
-  info: CrawlOptions;
+  options: CrawlOptions;
   size: number;
   timestamp: number;
 }

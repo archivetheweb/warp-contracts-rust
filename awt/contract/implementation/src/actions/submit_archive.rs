@@ -3,16 +3,12 @@ use std::collections::BTreeMap;
 use atw::action::{ActionResult, HandlerResult, SubmitArchive};
 use atw::error::ContractError;
 use atw::state::{ArchiveSubmission, State};
-use warp_wasm_utils::contract_utils::js_imports::{log, SmartWeave, Transaction};
+use url::Url;
 
 use super::Actionable;
 
 impl Actionable for SubmitArchive {
     fn action(self, caller: String, mut state: State) -> ActionResult {
-        log(("caller ".to_owned() + &SmartWeave::caller()).as_str());
-        log(("Transaction owner ".to_owned() + &Transaction::owner()).as_str());
-        log(&("Transaction::id()".to_owned() + &Transaction::id()));
-
         if !state.uploaders.contains_key(&caller) {
             return Err(ContractError::UploaderNotRegistered);
         }
@@ -24,6 +20,13 @@ impl Actionable for SubmitArchive {
             return Err(ContractError::ArchiveRequestDoesNotExist);
         }
 
+        let u = match Url::parse(&self.full_url) {
+            Ok(u) => u,
+            Err(e) => {
+                return Err(ContractError::InvalidURL(e.to_string()));
+            }
+        };
+
         let domain = state.archives.get_mut(&self.full_url);
         let submission = ArchiveSubmission {
             full_url: self.full_url.clone(),
@@ -32,7 +35,7 @@ impl Actionable for SubmitArchive {
             uploader_address: caller.clone(),
             archiving_request_id: self.archiving_request_id,
             timestamp: self.timestamp,
-            info: self.info,
+            options: self.options,
         };
         match domain {
             Some(d) => {
@@ -45,7 +48,7 @@ impl Actionable for SubmitArchive {
             None => {
                 let mut h: BTreeMap<usize, ArchiveSubmission> = BTreeMap::new();
                 h.insert(self.timestamp, submission);
-                state.archives.insert(self.full_url.clone(), h);
+                state.archives.insert(u.domain().unwrap().into(), h);
             }
         }
 

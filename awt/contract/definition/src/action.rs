@@ -42,7 +42,7 @@ pub struct SubmitArchive {
     pub size: usize,
     pub archiving_request_id: String, // index of the archiving request
     pub timestamp: usize,
-    pub info: CrawlOptions, // frequency of the archiving i.e. here it's once an hour (cron)
+    pub options: CrawlOptions, // frequency of the archiving i.e. here it's once an hour (cron)
 }
 
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]

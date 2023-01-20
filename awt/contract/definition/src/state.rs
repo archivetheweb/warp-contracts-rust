@@ -50,7 +50,7 @@ pub struct ArchiveSubmission {
     pub uploader_address: String,
     pub archiving_request_id: String, // index of the archiving request
     pub timestamp: usize,
-    pub info: CrawlOptions,
+    pub options: CrawlOptions,
 }
 
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]

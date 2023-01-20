@@ -1,20 +1,24 @@
+use super::Actionable;
 use atw::action::{ActionResult, HandlerResult, RequestArchiving};
 use atw::error::ContractError;
 use atw::state::{ArchiveRequest, State};
-use warp_wasm_utils::contract_utils::js_imports::{log, SmartWeave, Transaction};
-
-use super::Actionable;
+use url::Url;
+use warp_wasm_utils::contract_utils::js_imports::Transaction;
 
 impl Actionable for RequestArchiving {
     fn action(self, caller: String, mut state: State) -> ActionResult {
-        log(("caller ".to_owned() + &SmartWeave::caller()).as_str());
-        log(("Transaction owner ".to_owned() + &Transaction::owner()).as_str());
-        log(&("Transaction::id()".to_owned() + &Transaction::id()));
-
         let tx_id = &Transaction::id();
 
         if state.archiving_requests.contains_key(tx_id) {
             return Err(ContractError::ChooseAnotherID);
+        }
+
+        let urls = self.crawl_options.urls.clone();
+        for u in urls {
+            match Url::parse(&u) {
+                Ok(_) => {}
+                Err(e) => return Err(ContractError::InvalidURL(e.to_string())),
+            }
         }
 
         state.archiving_requests.insert(

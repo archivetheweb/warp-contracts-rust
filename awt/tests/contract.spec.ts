@@ -102,6 +102,18 @@ describe('Testing the ATW Contract', () => {
     expect(tagsParser.getTag(contractSrcTx, SmartWeaveTags.WASM_LANG)).toEqual('rust');
   });
 
+  it('should NOT allow a random uploader to submit', async () => {
+    let ts = 1;
+    let copiedArchiveSubmission = copyObject(archiveSubmission);
+    copiedArchiveSubmission.timestamp = ts;
+    copiedArchiveSubmission.archiveRequestId = '';
+    await atwContract.submitArchive(copiedArchiveSubmission);
+
+    const state = await atwContract.currentState();
+
+    expect(Object.keys(state.archives).length).toEqual(0);
+  });
+
   it('should register uploader', async () => {
     await atwContract.registerUploader({ friendlyName: 'bob' });
     const state = await atwContract.currentState();

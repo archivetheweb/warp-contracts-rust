@@ -26,6 +26,18 @@ describe('Testing the ATW Contract', () => {
 
   let tagsParser;
 
+  let archiveSubmission = {
+    options: {
+      depth: 0, // depth of the crawl
+      domainOnly: false // whether we want a domain only crawl
+    },
+    arweaveTx: '',
+    fullUrl: 'https://example.com?hello=hi',
+    size: 1,
+    timestamp: 1,
+    archiveRequestId: ''
+  };
+
   beforeAll(async () => {
     // note: each tests suit (i.e. file with tests that Jest is running concurrently
     // with another files has to have ArLocal set to a different port!)
@@ -116,21 +128,14 @@ describe('Testing the ATW Contract', () => {
 
   it('should submit an archive', async () => {
     let beginState = await atwContract.currentState();
-    let archiveRequestID = Object.keys(beginState.archiveRequests)[0];
+    let archiveRequestId = Object.keys(beginState.archiveRequests)[0];
 
     let beginCount = Object.keys(beginState.archives).length;
     let ts = 1;
-    await atwContract.submitArchive({
-      options: {
-        depth: 0, // depth of the crawl
-        domainOnly: false // whether we want a domain only crawl
-      },
-      arweaveTx: '',
-      fullUrl: 'https://example.com?hello=hi',
-      size: 1,
-      timestamp: ts,
-      archiveRequestId: archiveRequestID
-    });
+    let copiedArchiveSubmission = copyObject(archiveSubmission);
+    copiedArchiveSubmission.timestamp = ts;
+    copiedArchiveSubmission.archiveRequestId = archiveRequestId;
+    await atwContract.submitArchive(copiedArchiveSubmission);
     const state = await atwContract.currentState();
 
     expect(Object.keys(state.archives).length - beginCount).toEqual(1);
@@ -163,3 +168,7 @@ describe('Testing the ATW Contract', () => {
     expect(beginCount - Object.keys(state.archiveRequests).length).toEqual(0);
   });
 });
+
+function copyObject(object: any): any {
+  return JSON.parse(JSON.stringify(object));
+}

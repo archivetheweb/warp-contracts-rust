@@ -27,9 +27,10 @@ pub enum ContractState {
 pub struct ArchiveRequest {
     pub id: String,
     pub crawl_options: CrawlOptions,
-    pub uploader_address: String, // uploader for this pool
+    pub uploader_address: String,       // uploader for this pool
     pub start_timestamp: usize, // start_timestamp of the period where we want to archive the website
     pub end_timestamp: usize,   // end_timestamp
+    pub latest_upload_timestamp: usize, // end_timestamp
     pub frequency: String,      // frequency of the archiving i.e. here it's once an hour (cron)
     pub requested_by: String,
 }

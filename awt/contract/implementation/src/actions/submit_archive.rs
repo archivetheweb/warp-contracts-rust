@@ -13,12 +13,10 @@ impl Actionable for SubmitArchive {
             return Err(ContractError::UploaderNotRegistered);
         }
 
-        if !state
-            .archive_requests
-            .contains_key(&self.archive_request_id)
-        {
-            return Err(ContractError::ArchiveRequestDoesNotExist);
-        }
+        match state.archive_requests.get_mut(&self.archive_request_id) {
+            Some(req) => req.latest_upload_timestamp = self.timestamp,
+            None => return Err(ContractError::ArchiveRequestDoesNotExist),
+        };
 
         let u = match Url::parse(&self.full_url) {
             Ok(u) => u,

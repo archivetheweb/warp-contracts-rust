@@ -29,6 +29,7 @@ impl Actionable for RequestArchiving {
                 uploader_address: self.uploader_address,
                 start_timestamp: self.start_timestamp,
                 end_timestamp: self.end_timestamp,
+                latest_upload_timestamp: 0,
                 frequency: self.frequency,
                 requested_by: caller,
             },

@@ -171,6 +171,8 @@ describe('Testing the ATW Contract', () => {
 
     expect(Object.keys(state.archives['example.com']).length - beginCount).toEqual(1);
 
+    expect(state.archiveRequests[archiveRequestId].latestUploadTimestamp).toEqual(ts);
+
     expect(state.archives['example.com'][ts]).toBeDefined();
   });
 

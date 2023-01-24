@@ -28,6 +28,7 @@ export interface ArchiveRequest {
   endTimestamp: number;
   frequency: string;
   id: string;
+  latestUploadTimestamp: number;
   requestedBy: string;
   startTimestamp: number;
   uploaderAddress: string;

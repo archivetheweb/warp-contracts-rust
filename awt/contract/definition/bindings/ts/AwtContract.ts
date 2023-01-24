@@ -20,7 +20,14 @@ import {
   ArchiveRequestByID,
   ArchiveRequestByIDResult
 } from './View';
-import { RegisterUploader, RequestArchiving, SubmitArchive, DeleteArchiveRequest, Evolve } from './WriteAction';
+import {
+  RegisterUploader,
+  RequestArchiving,
+  SubmitArchive,
+  DeleteArchiveRequest,
+  DeRegisterUploader,
+  Evolve
+} from './WriteAction';
 import { State } from './ContractState';
 
 export interface BaseInput {
@@ -124,6 +131,16 @@ export class AwtContract {
   ): Promise<WriteInteractionResponse | null> {
     return await this.contract.writeInteraction<BaseInput & DeleteArchiveRequest>(
       { function: 'deleteArchiveRequest', ...deleteArchiveRequest },
+      options
+    );
+  }
+
+  async deRegisterUploader(
+    deRegisterUploader: DeRegisterUploader,
+    options?: WriteInteractionOptions
+  ): Promise<WriteInteractionResponse | null> {
+    return await this.contract.writeInteraction<BaseInput & DeRegisterUploader>(
+      { function: 'deRegisterUploader', ...deRegisterUploader },
       options
     );
   }

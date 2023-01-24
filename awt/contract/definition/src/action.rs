@@ -26,6 +26,10 @@ pub struct RegisterUploader {
 
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
 #[serde(rename_all = "camelCase")]
+pub struct DeRegisterUploader {}
+
+#[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
+#[serde(rename_all = "camelCase")]
 pub struct RequestArchiving {
     pub crawl_options: CrawlOptions,
     pub uploader_address: String, // uploader for this pool
@@ -66,8 +70,8 @@ pub struct Evolve {
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq)]
 #[serde(rename_all = "camelCase", tag = "function")]
 pub enum Action {
-    // Balance(Balance),
     RegisterUploader(RegisterUploader),
+    DeRegisterUploader(DeRegisterUploader),
     RequestArchiving(RequestArchiving),
     SubmitArchive(SubmitArchive),
     DeleteArchiveRequest(DeleteArchiveRequest),
@@ -98,6 +102,7 @@ pub enum WriteAction {
     RequestArchiving(RequestArchiving),
     SubmitArchive(SubmitArchive),
     DeleteArchiveRequest(DeleteArchiveRequest),
+    DeRegisterUploader(DeRegisterUploader),
 
     Evolve(Evolve),
 }

@@ -200,6 +200,19 @@ describe('Testing the ATW Contract', () => {
 
     expect(beginCount - Object.keys(state.archiveRequests).length).toEqual(0);
   });
+
+  it('should deregister an uploader', async () => {
+    let beginState = await atwContract.currentState();
+    let beginCount = Object.keys(beginState.uploaders).length;
+
+    // we create an archive request
+    let { originalTxId } = await atwContract.deRegisterUploader({});
+
+    const state = await atwContract.currentState();
+
+    expect(beginCount - Object.keys(state.uploaders).length).toEqual(1);
+    expect(state.uploaders[walletAddress]).toBeUndefined();
+  });
 });
 
 function copyObject(object: any): any {

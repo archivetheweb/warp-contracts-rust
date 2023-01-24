@@ -5,7 +5,13 @@
  * and run json-schema-to-typescript to regenerate this file.
  */
 
-export type WriteAction = RegisterUploader | RequestArchiving | SubmitArchive | DeleteArchiveRequest | Evolve;
+export type WriteAction =
+  | RegisterUploader
+  | RequestArchiving
+  | SubmitArchive
+  | DeleteArchiveRequest
+  | DeRegisterUploader
+  | Evolve;
 
 export interface RegisterUploader {
   friendlyName: string;
@@ -37,6 +43,7 @@ export interface ArchiveOptions {
 export interface DeleteArchiveRequest {
   archiveId: string;
 }
+export interface DeRegisterUploader {}
 export interface Evolve {
   value: string;
 }

@@ -2,6 +2,7 @@ use async_trait::async_trait;
 use atw::{action::ActionResult, state::State};
 
 pub mod delete_archive_request;
+pub mod deregister_uploader;
 pub mod evolve;
 pub mod register_uploader;
 pub mod request_archiving;

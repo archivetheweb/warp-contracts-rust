@@ -65,7 +65,7 @@ module.exports.submitArchive = async function (host, port, protocol, target, wal
   const awt = await connectAWTContract(arweave, wallet, txId, target);
 
   let beginState = await awt.currentState();
-  let key = Object.keys(beginState.archivingRequests)[0];
+  let key = Object.keys(beginState.archiveRequests)[0];
 
   const { originalTxId } = await awt.submitArchive({
     archiveRequestId: key,

@@ -155,6 +155,25 @@ describe('Testing the ATW Contract', () => {
     expect(state.archives['example.com'][ts]).toBeDefined();
   });
 
+  it('should submit a second archive', async () => {
+    let beginState = await atwContract.currentState();
+    let archiveRequestId = Object.keys(beginState.archiveRequests)[0];
+
+    let beginCount = Object.keys(beginState.archives['example.com']).length;
+    let ts = 2;
+    let copiedArchiveSubmission = copyObject(archiveSubmission);
+    copiedArchiveSubmission.timestamp = ts;
+    copiedArchiveSubmission.archiveRequestId = archiveRequestId;
+    await atwContract.submitArchive(copiedArchiveSubmission);
+    const state = await atwContract.currentState();
+
+    console.log(state);
+
+    expect(Object.keys(state.archives['example.com']).length - beginCount).toEqual(1);
+
+    expect(state.archives['example.com'][ts]).toBeDefined();
+  });
+
   it('should delete an archive request', async () => {
     let beginState = await atwContract.currentState();
     let beginCount = Object.keys(beginState.archiveRequests).length;

@@ -27,7 +27,8 @@ impl Actionable for SubmitArchive {
             }
         };
 
-        let domain = state.archives.get_mut(&self.full_url);
+        let domain: String = u.domain().unwrap().into();
+
         let submission = ArchiveSubmission {
             full_url: self.full_url.clone(),
             arweave_tx: self.arweave_tx,
@@ -37,7 +38,8 @@ impl Actionable for SubmitArchive {
             timestamp: self.timestamp,
             options: self.options,
         };
-        match domain {
+
+        match state.archives.get_mut(&domain) {
             Some(d) => {
                 if d.get(&self.timestamp).is_some() {
                     return Err(ContractError::ArchiveAlreadySubmitted);
@@ -48,7 +50,7 @@ impl Actionable for SubmitArchive {
             None => {
                 let mut h: BTreeMap<usize, ArchiveSubmission> = BTreeMap::new();
                 h.insert(self.timestamp, submission);
-                state.archives.insert(u.domain().unwrap().into(), h);
+                state.archives.insert(domain, h);
             }
         }
 

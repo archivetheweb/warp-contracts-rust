@@ -71,7 +71,7 @@ module.exports.submitArchive = async function (host, port, protocol, target, wal
     archiveRequestId: key,
     arweaveTx: 'string',
     fullUrl: 'https://example.com',
-    info: { depth: 0, urls: ['https://example.com'], domainOnly: false },
+    options: { depth: 0, urls: ['https://example.com'], domainOnly: false },
     size: 1,
     timestamp: 1
   });

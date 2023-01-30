@@ -36,8 +36,10 @@ module.exports.requestArchiving = async function (host, port, protocol, target, 
 
   const { originalTxId } = await awt.requestArchiving({
     crawlOptions: { depth: 0, urls: ['https://example.com'], domainOnly: false },
-    endTimestamp: Math.floor(Date.now() / 1000) + 1000000,
-    frequency: '* 1/1 * * * *',
+    // for about a day
+    endTimestamp: Math.floor(Date.now() / 1000) + 100000,
+    // every 10 minutes
+    frequency: '0 0/10 * * * *',
     startTimestamp: Math.floor(Date.now() / 1000),
     uploaderAddress: walletAddr
   });

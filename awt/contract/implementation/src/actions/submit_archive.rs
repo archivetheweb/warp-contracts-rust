@@ -46,7 +46,7 @@ impl Actionable for SubmitArchive {
                 }
             }
             None => {
-                let mut h: BTreeMap<usize, ArchiveSubmission> = BTreeMap::new();
+                let mut h: BTreeMap<i64, ArchiveSubmission> = BTreeMap::new();
                 h.insert(self.timestamp, submission);
                 state.archives.insert(domain, h);
             }

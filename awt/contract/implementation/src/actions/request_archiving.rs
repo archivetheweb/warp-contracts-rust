@@ -2,6 +2,8 @@ use super::Actionable;
 use atw::action::{ActionResult, HandlerResult, RequestArchiving};
 use atw::error::ContractError;
 use atw::state::{ArchiveRequest, State};
+use cron::Schedule;
+use std::str::FromStr;
 use url::Url;
 use warp_wasm_utils::contract_utils::js_imports::Transaction;
 
@@ -21,6 +23,13 @@ impl Actionable for RequestArchiving {
             }
         }
 
+        let freq = match Schedule::from_str(&self.frequency) {
+            Ok(_) => self.frequency,
+            Err(e) => {
+                return Err(ContractError::InvalidFrequency(e.to_string()));
+            }
+        };
+
         state.archive_requests.insert(
             tx_id.clone(),
             ArchiveRequest {
@@ -30,7 +39,7 @@ impl Actionable for RequestArchiving {
                 start_timestamp: self.start_timestamp,
                 end_timestamp: self.end_timestamp,
                 latest_upload_timestamp: 0,
-                frequency: self.frequency,
+                frequency: freq,
                 requested_by: caller,
             },
         );

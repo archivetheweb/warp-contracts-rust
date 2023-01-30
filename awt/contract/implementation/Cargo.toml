@@ -18,6 +18,7 @@ async-recursion = "1.0.0"
 async-trait = "0.1.56"
 tokio-test = "0.4.2"
 url = "2.3.1"
+cron = "0.12.0"
 
 [package.metadata.wasm-pack.profile.profiling.wasm-bindgen]
 demangle-name-section = false

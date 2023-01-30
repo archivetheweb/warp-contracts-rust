@@ -33,9 +33,9 @@ pub struct DeRegisterUploader {}
 pub struct RequestArchiving {
     pub crawl_options: CrawlOptions,
     pub uploader_address: String, // uploader for this pool
-    pub start_timestamp: usize, // start_timestamp of the period where we want to archive the website
-    pub end_timestamp: usize,   // end_timestamp
-    pub frequency: String,      // frequency of the archiving i.e. here it's once an hour (cron)
+    pub start_timestamp: i64, // start_timestamp of the period where we want to archive the website
+    pub end_timestamp: i64,   // end_timestamp
+    pub frequency: String,    // frequency of the archiving i.e. here it's once an hour (cron)
 }
 
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
@@ -45,7 +45,7 @@ pub struct SubmitArchive {
     pub arweave_tx: String, // tx where the archive is deploy (here can add index tx too)
     pub size: usize,
     pub archive_request_id: String, // index of the archiving request
-    pub timestamp: usize,
+    pub timestamp: i64,
     pub options: ArchiveOptions, // frequency of the archiving i.e. here it's once an hour (cron)
 }
 

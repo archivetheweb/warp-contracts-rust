@@ -16,6 +16,8 @@ pub enum ContractError {
     ArchiveAlreadySubmitted,
     InvalidURL(String),
 
+    InvalidFrequency(String),
+
     OnlyOwnerCanEvolve,
     EvolveNotAllowed,
 }

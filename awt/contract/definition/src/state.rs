@@ -12,7 +12,7 @@ pub struct State {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub can_evolve: Option<bool>,
     pub archive_requests: HashMap<String, ArchiveRequest>,
-    pub archives: BTreeMap<String, BTreeMap<usize, ArchiveSubmission>>,
+    pub archives: BTreeMap<String, BTreeMap<i64, ArchiveSubmission>>,
     pub uploaders: HashMap<String, Uploader>,
 }
 
@@ -27,11 +27,11 @@ pub enum ContractState {
 pub struct ArchiveRequest {
     pub id: String,
     pub crawl_options: CrawlOptions,
-    pub uploader_address: String,       // uploader for this pool
-    pub start_timestamp: usize, // start_timestamp of the period where we want to archive the website
-    pub end_timestamp: usize,   // end_timestamp
-    pub latest_upload_timestamp: usize, // end_timestamp
-    pub frequency: String,      // frequency of the archiving i.e. here it's once an hour (cron)
+    pub uploader_address: String,     // uploader for this pool
+    pub start_timestamp: i64, // start_timestamp of the period where we want to archive the website
+    pub end_timestamp: i64,   // end_timestamp
+    pub latest_upload_timestamp: i64, // end_timestamp
+    pub frequency: String,    // frequency of the archiving i.e. here it's once an hour (cron)
     pub requested_by: String,
 }
 
@@ -58,7 +58,7 @@ pub struct ArchiveSubmission {
     pub size: usize,
     pub uploader_address: String,
     pub archive_request_id: String, // index of the archiving request
-    pub timestamp: usize,
+    pub timestamp: i64,
     pub options: ArchiveOptions,
 }
 

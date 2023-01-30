@@ -3,7 +3,9 @@ use serde::{Deserialize, Serialize};
 use strum_macros::EnumIter;
 
 use crate::error::ContractError;
-use crate::state::{ArchiveOptions, ArchiveRequest, ArchiveSubmission, CrawlOptions, State};
+use crate::state::{
+    ArchiveInfo, ArchiveOptions, ArchiveRequest, ArchivesByURLInfo, Options, State,
+};
 
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
 #[serde(rename_all = "camelCase")]
@@ -11,6 +13,10 @@ pub struct ArchivesByURL {
     pub url: String,
     pub count: usize,
 }
+
+#[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
+#[serde(rename_all = "camelCase")]
+pub struct Archives {}
 
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
 #[serde(rename_all = "camelCase")]
@@ -31,7 +37,7 @@ pub struct DeRegisterUploader {}
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct RequestArchiving {
-    pub crawl_options: CrawlOptions,
+    pub options: Options,
     pub uploader_address: String, // uploader for this pool
     pub start_timestamp: i64, // start_timestamp of the period where we want to archive the website
     pub end_timestamp: i64,   // end_timestamp
@@ -47,6 +53,8 @@ pub struct SubmitArchive {
     pub archive_request_id: String, // index of the archiving request
     pub timestamp: i64,
     pub options: ArchiveOptions, // frequency of the archiving i.e. here it's once an hour (cron)
+    pub screenshot_tx: String,
+    pub title: String,
 }
 
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
@@ -78,6 +86,7 @@ pub enum Action {
 
     ArchiveRequestByID(ArchiveRequestByID),
     ArchivesByURL(ArchivesByURL),
+    Archives(Archives),
     ArchiveRequestsFor(ArchiveRequestsFor),
     Evolve(Evolve),
 }
@@ -110,7 +119,13 @@ pub enum WriteAction {
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct ArchivesByURLResult {
-    pub archives: Vec<ArchiveSubmission>,
+    pub archives: ArchivesByURLInfo,
+}
+
+#[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
+#[serde(rename_all = "camelCase")]
+pub struct ArchivesResult {
+    pub archives: Vec<ArchiveInfo>,
 }
 
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
@@ -128,7 +143,8 @@ pub struct ArchiveRequestByIDResult {
 #[derive(JsonSchema, Clone, PartialEq, Debug, Serialize, Deserialize, Eq, EnumIter)]
 #[serde(rename_all = "camelCase", tag = "function")]
 pub enum ReadResponse {
-    ArchivesResult(ArchivesByURLResult),
+    ArchivesResult(ArchivesResult),
+    ArchivesByURLResult(ArchivesByURLResult),
     ArchiveRequestsResult(ArchiveRequestsForResult),
     ArchiveRequestResult(ArchiveRequestByIDResult),
 }

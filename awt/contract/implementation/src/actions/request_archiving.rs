@@ -15,7 +15,7 @@ impl Actionable for RequestArchiving {
             return Err(ContractError::ChooseAnotherID);
         }
 
-        let urls = self.crawl_options.urls.clone();
+        let urls = self.options.urls.clone();
         for u in urls {
             match Url::parse(&u) {
                 Ok(_) => {}
@@ -34,11 +34,11 @@ impl Actionable for RequestArchiving {
             tx_id.clone(),
             ArchiveRequest {
                 id: tx_id.clone(),
-                crawl_options: self.crawl_options,
+                options: self.options,
                 uploader_address: self.uploader_address,
                 start_timestamp: self.start_timestamp,
                 end_timestamp: self.end_timestamp,
-                latest_upload_timestamp: 0,
+                latest_archived_timestamp: 0,
                 frequency: freq,
                 requested_by: caller,
             },

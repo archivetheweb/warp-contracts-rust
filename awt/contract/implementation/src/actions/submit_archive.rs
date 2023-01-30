@@ -14,7 +14,7 @@ impl Actionable for SubmitArchive {
         }
 
         match state.archive_requests.get_mut(&self.archive_request_id) {
-            Some(req) => req.latest_upload_timestamp = self.timestamp,
+            Some(req) => req.latest_archived_timestamp = self.timestamp,
             None => return Err(ContractError::ArchiveRequestDoesNotExist),
         };
 
@@ -35,6 +35,8 @@ impl Actionable for SubmitArchive {
             archive_request_id: self.archive_request_id,
             timestamp: self.timestamp,
             options: self.options,
+            screenshot_tx: self.screenshot_tx,
+            title: self.title,
         };
 
         match state.archives.get_mut(&domain) {

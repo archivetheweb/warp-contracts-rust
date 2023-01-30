@@ -26,18 +26,18 @@ pub enum ContractState {
 #[serde(rename_all = "camelCase")]
 pub struct ArchiveRequest {
     pub id: String,
-    pub crawl_options: CrawlOptions,
-    pub uploader_address: String,     // uploader for this pool
+    pub options: Options,
+    pub uploader_address: String,       // uploader for this pool
     pub start_timestamp: i64, // start_timestamp of the period where we want to archive the website
     pub end_timestamp: i64,   // end_timestamp
-    pub latest_upload_timestamp: i64, // end_timestamp
+    pub latest_archived_timestamp: i64, // end_timestamp
     pub frequency: String,    // frequency of the archiving i.e. here it's once an hour (cron)
     pub requested_by: String,
 }
 
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
 #[serde(rename_all = "camelCase")]
-pub struct CrawlOptions {
+pub struct Options {
     pub urls: Vec<String>,
     pub depth: u8,         // depth of the crawl
     pub domain_only: bool, // whether we want a domain only crawl
@@ -60,6 +60,28 @@ pub struct ArchiveSubmission {
     pub archive_request_id: String, // index of the archiving request
     pub timestamp: i64,
     pub options: ArchiveOptions,
+    pub screenshot_tx: String,
+    pub title: String,
+}
+
+#[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
+#[serde(rename_all = "camelCase")]
+pub struct ArchivesByURLInfo {
+    pub screenshot_tx: String,
+    pub title: String,
+    pub url: String,
+    pub last_archived_timestamp: i64,
+    pub archived_info: Vec<ArchiveSubmission>,
+}
+
+#[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
+#[serde(rename_all = "camelCase")]
+pub struct ArchiveInfo {
+    pub url: String, // full url
+    pub screenshot_tx: String,
+    pub title: String,
+    pub last_archived_timestamp: i64,
+    pub archived_count: usize,
 }
 
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]

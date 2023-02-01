@@ -35,7 +35,7 @@ module.exports.requestArchiving = async function (host, port, protocol, target, 
   const awt = await connectAWTContract(arweave, wallet, txId, target);
 
   const { originalTxId } = await awt.requestArchiving({
-    crawlOptions: { depth: 0, urls: ['https://example.com'], domainOnly: false },
+    options: { depth: 0, urls: ['https://example.com'], domainOnly: false },
     // for about a day
     endTimestamp: Math.floor(Date.now() / 1000) + 100000,
     // every 10 minutes

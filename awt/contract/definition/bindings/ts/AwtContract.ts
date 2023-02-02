@@ -18,7 +18,9 @@ import {
   ArchiveRequestsFor,
   ArchiveRequestsForResult,
   ArchiveRequestByID,
-  ArchiveRequestByIDResult
+  ArchiveRequestByIDResult,
+  Archives,
+  ArchivesResult
 } from './View';
 import {
   RegisterUploader,
@@ -86,6 +88,19 @@ export class AwtContract {
     const interactionResult = await this.contract.viewState<BaseInput & ArchiveRequestByID, ArchiveRequestByIDResult>({
       function: 'archiveRequestByID',
       ...archiveRequestByID
+    });
+    if (interactionResult.type == 'error') {
+      throw new ContractError(interactionResult.errorMessage);
+    } else if (interactionResult.type == 'exception') {
+      throw Error(interactionResult.errorMessage);
+    }
+    return interactionResult.result;
+  }
+
+  async archives(archives: Archives): Promise<ArchivesResult> {
+    const interactionResult = await this.contract.viewState<BaseInput & Archives, ArchivesResult>({
+      function: 'archives',
+      ...archives
     });
     if (interactionResult.type == 'error') {
       throw new ContractError(interactionResult.errorMessage);

@@ -78,17 +78,19 @@ pub struct Evolve {
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq)]
 #[serde(rename_all = "camelCase", tag = "function")]
 pub enum Action {
+    // Write
     RegisterUploader(RegisterUploader),
     DeRegisterUploader(DeRegisterUploader),
     RequestArchiving(RequestArchiving),
     SubmitArchive(SubmitArchive),
     DeleteArchiveRequest(DeleteArchiveRequest),
-
-    ArchiveRequestByID(ArchiveRequestByID),
-    ArchivesByURL(ArchivesByURL),
-    Archives(Archives),
-    ArchiveRequestsFor(ArchiveRequestsFor),
     Evolve(Evolve),
+
+    // Read
+    ArchivesByURL(ArchivesByURL),
+    ArchiveRequestsFor(ArchiveRequestsFor),
+    ArchiveRequestByID(ArchiveRequestByID),
+    Archives(Archives),
 }
 
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, EnumIter)]
@@ -102,6 +104,9 @@ pub enum View {
 
     ArchiveRequestByID(ArchiveRequestByID),
     ArchiveRequestByIDResult(ArchiveRequestByIDResult),
+
+    Archives(Archives),
+    ArchivesResult(ArchivesResult),
 }
 
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, EnumIter)]

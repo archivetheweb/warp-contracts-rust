@@ -20,7 +20,9 @@ import {
   ArchiveRequestByID,
   ArchiveRequestByIDResult,
   Archives,
-  ArchivesResult
+  ArchivesResult,
+  ArchivesByURLAndTimestamp,
+  ArchivesByURLAndTimestampResult
 } from './View';
 import {
   RegisterUploader,
@@ -102,6 +104,21 @@ export class AwtContract {
       function: 'archives',
       ...archives
     });
+    if (interactionResult.type == 'error') {
+      throw new ContractError(interactionResult.errorMessage);
+    } else if (interactionResult.type == 'exception') {
+      throw Error(interactionResult.errorMessage);
+    }
+    return interactionResult.result;
+  }
+
+  async archivesByURLAndTimestamp(
+    archivesByURLAndTimestamp: ArchivesByURLAndTimestamp
+  ): Promise<ArchivesByURLAndTimestampResult> {
+    const interactionResult = await this.contract.viewState<
+      BaseInput & ArchivesByURLAndTimestamp,
+      ArchivesByURLAndTimestampResult
+    >({ function: 'archivesByURLAndTimestamp', ...archivesByURLAndTimestamp });
     if (interactionResult.type == 'error') {
       throw new ContractError(interactionResult.errorMessage);
     } else if (interactionResult.type == 'exception') {

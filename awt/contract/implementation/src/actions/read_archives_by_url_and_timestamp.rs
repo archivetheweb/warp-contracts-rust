@@ -1,6 +1,9 @@
 use atw::{
-    action::{ActionResult, ArchivesByURL, ArchivesByURLResult, HandlerResult, ReadResponse},
-    state::{ArchivesByURLInfo, State},
+    action::{
+        ActionResult, ArchivesByURLAndTimestamp, ArchivesByURLAndTimestampResult, HandlerResult,
+        ReadResponse,
+    },
+    state::State,
 };
 
 use super::Actionable;
@@ -21,7 +24,7 @@ impl Actionable for ArchivesByURLAndTimestamp {
 
         Ok(HandlerResult::Read(
             ReadResponse::ArchivesByURLAndTimestampResult(ArchivesByURLAndTimestampResult {
-                archive: d,
+                archive: archive.clone(),
             }),
         ))
     }

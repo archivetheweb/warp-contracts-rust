@@ -19,6 +19,7 @@ pub async fn handle(state: State, action: Action) -> ActionResult {
         Action::Evolve(action) => action.action(effective_caller, state),
         Action::DeleteArchiveRequest(action) => action.action(effective_caller, state),
         Action::ArchivesByURL(action) => action.action(effective_caller, state),
+        Action::ArchivesByURLAndTimestamp(action) => action.action(effective_caller, state),
         Action::ArchiveRequestsFor(action) => action.action(effective_caller, state),
         Action::ArchiveRequestByID(action) => action.action(effective_caller, state),
         Action::Archives(action) => action.action(effective_caller, state),

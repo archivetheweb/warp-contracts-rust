@@ -4,7 +4,8 @@ use strum_macros::EnumIter;
 
 use crate::error::ContractError;
 use crate::state::{
-    ArchiveInfo, ArchiveOptions, ArchiveRequest, ArchivesByURLInfo, Options, State,
+    ArchiveInfo, ArchiveOptions, ArchiveRequest, ArchiveSubmission, ArchivesByURLInfo, Options,
+    State,
 };
 
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
@@ -12,6 +13,13 @@ use crate::state::{
 pub struct ArchivesByURL {
     pub url: String,
     pub count: usize,
+}
+
+#[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
+#[serde(rename_all = "camelCase")]
+pub struct ArchivesByURLAndTimestamp {
+    pub url: String,
+    pub timestamp: i64,
 }
 
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
@@ -88,6 +96,7 @@ pub enum Action {
 
     // Read
     ArchivesByURL(ArchivesByURL),
+    ArchivesByURLAndTimestamp(ArchivesByURLAndTimestamp),
     ArchiveRequestsFor(ArchiveRequestsFor),
     ArchiveRequestByID(ArchiveRequestByID),
     Archives(Archives),
@@ -107,6 +116,9 @@ pub enum View {
 
     Archives(Archives),
     ArchivesResult(ArchivesResult),
+
+    ArchivesByURLAndTimestamp(ArchivesByURLAndTimestamp),
+    ArchivesByURLAndTimestampResult(ArchivesByURLAndTimestampResult),
 }
 
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, EnumIter)]
@@ -125,6 +137,12 @@ pub enum WriteAction {
 #[serde(rename_all = "camelCase")]
 pub struct ArchivesByURLResult {
     pub archives: ArchivesByURLInfo,
+}
+
+#[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
+#[serde(rename_all = "camelCase")]
+pub struct ArchivesByURLAndTimestampResult {
+    pub archive: ArchiveSubmission,
 }
 
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
@@ -150,6 +168,7 @@ pub struct ArchiveRequestByIDResult {
 pub enum ReadResponse {
     ArchivesResult(ArchivesResult),
     ArchivesByURLResult(ArchivesByURLResult),
+    ArchivesByURLAndTimestampResult(ArchivesByURLAndTimestampResult),
     ArchiveRequestsResult(ArchiveRequestsForResult),
     ArchiveRequestResult(ArchiveRequestByIDResult),
 }

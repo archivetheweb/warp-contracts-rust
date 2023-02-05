@@ -15,8 +15,6 @@ module.exports.evolve = async function (host, port, protocol, target, walletJwk)
   const txId = contractTxId(target);
   const awt = await connectAWTContract(arweave, wallet, txId, target);
 
-  let state = await awt.currentState();
-  console.log('current evolve:', state.evolve);
   const srcTx = await warp.createSourceTx(
     {
       src: contractSrc,
@@ -25,11 +23,9 @@ module.exports.evolve = async function (host, port, protocol, target, walletJwk)
     },
     wallet
   );
-  const newContractTxId = await warp.saveSourceTx(srcTx, true);
+  const newContractTxId = await warp.saveSourceTx(srcTx);
 
   await awt.evolve({ value: newContractTxId });
-
-  await fs.writeFileSync(path.join(__dirname, `../${target}/contract-tx-id.txt`), newContractTxId);
 
   if (target == 'testnet' || target == 'local') {
     await mineBlock(arweave);

@@ -21,7 +21,6 @@ module.exports.readArchiveRequestFor = async function (host, port, protocol, tar
   const wallet = await loadWallet(arweave, walletJwk, target, true);
 
   const walletAddress = await arweave.wallets.jwkToAddress(wallet);
-
   const txId = contractTxId(target);
   const awt = await connectAWTContract(arweave, wallet, txId, target);
   const archiveRequestsFor = await awt.archiveRequestsFor({ address: walletAddress });

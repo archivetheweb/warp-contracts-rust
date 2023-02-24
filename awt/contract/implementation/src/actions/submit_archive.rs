@@ -25,7 +25,8 @@ impl Actionable for SubmitArchive {
             }
         };
 
-        let domain: String = u.domain().unwrap().into();
+        let mut domain: String = u.domain().unwrap().into();
+        domain = domain.replace("www.", "");
 
         let submission = ArchiveSubmission {
             full_url: self.full_url.clone(),

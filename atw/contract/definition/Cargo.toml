@@ -2,7 +2,7 @@
 name = "atw"
 version = "0.1.0"
 edition = "2021"
-description = "Warp PST template"
+description = "Archive The Web contract definition"
 license = "MIT"
 
 [dependencies]

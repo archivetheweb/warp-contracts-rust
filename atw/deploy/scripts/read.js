@@ -2,7 +2,7 @@ const { loadWallet } = require('./utils/load-wallet');
 const { connectArweave } = require('./utils/connect-arweave');
 const { connectContract } = require('./utils/connect-contract');
 const { contractTxId } = require(`./utils/contract-tx-id`);
-const { connectAWTContract } = require('./utils/connect-awt-contract');
+const { connectATWContract } = require('./utils/connect-atw-contract');
 
 module.exports.readContractState = async function (host, port, protocol, target, walletJwk) {
   const arweave = connectArweave(host, port, protocol);
@@ -22,8 +22,8 @@ module.exports.readArchiveRequestFor = async function (host, port, protocol, tar
 
   const walletAddress = await arweave.wallets.jwkToAddress(wallet);
   const txId = contractTxId(target);
-  const awt = await connectAWTContract(arweave, wallet, txId, target);
-  const archiveRequestsFor = await awt.archiveRequestsFor({ address: walletAddress });
+  const atw = await connectATWContract(arweave, wallet, txId, target);
+  const archiveRequestsFor = await atw.archiveRequestsFor({ address: walletAddress });
 
   console.log(archiveRequestsFor);
 };
@@ -35,8 +35,8 @@ module.exports.archivesByURL = async function (host, port, protocol, target, wal
   const walletAddress = await arweave.wallets.jwkToAddress(wallet);
 
   const txId = contractTxId(target);
-  const awt = await connectAWTContract(arweave, wallet, txId, target);
-  const archivesByURL = await awt.archivesByURL({ url: 'https://example.com', count: 10 });
+  const atw = await connectATWContract(arweave, wallet, txId, target);
+  const archivesByURL = await atw.archivesByURL({ url: 'https://example.com', count: 10 });
 
   console.log(archivesByURL);
 };

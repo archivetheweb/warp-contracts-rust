@@ -5,7 +5,7 @@ import Arweave from 'arweave';
 import { JWKInterface } from 'arweave/node/lib/wallet';
 import { InteractionResult, LoggerFactory, Warp, SmartWeaveTags, WarpFactory, TagsParser } from 'warp-contracts';
 import path from 'path';
-import { AwtContract } from '../contract/definition/bindings/ts/AwtContract';
+import { AtwContract } from '../contract/definition/bindings/ts/AtwContract';
 import { State } from '../contract/definition/bindings/ts/ContractState';
 
 jest.setTimeout(30000);
@@ -21,7 +21,7 @@ describe('Testing the ATW Contract', () => {
   let arweave: Arweave;
   let arlocal: ArLocal;
   let warp: Warp;
-  let atwContract: AwtContract;
+  let atwContract: AtwContract;
   let contractTxId: string;
 
   let tagsParser;
@@ -77,9 +77,9 @@ describe('Testing the ATW Contract', () => {
 
       contractTxId = ctxID;
 
-      atwContract = new AwtContract(contractTxId, warp);
+      atwContract = new AtwContract(contractTxId, warp);
 
-      // connecting wallet to the Awt contract
+      // connecting wallet to the Atw contract
       atwContract.connect(wallet).setEvaluationOptions({ internalWrites: true });
     } catch (e) {
       console.error(e);

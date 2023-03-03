@@ -1,6 +1,6 @@
 const { loadWallet, walletAddress } = require('./utils/load-wallet');
 const { connectArweave } = require('./utils/connect-arweave');
-const { connectAWTContract } = require('./utils/connect-awt-contract');
+const { connectATWContract } = require('./utils/connect-atw-contract');
 const { contractTxId } = require('./utils/contract-tx-id');
 const { mineBlock } = require('./utils/mine-block');
 
@@ -8,12 +8,12 @@ module.exports.registerUploader = async function (host, port, protocol, target, 
   const arweave = connectArweave(host, port, protocol);
   const wallet = await loadWallet(arweave, walletJwk, target, true);
   const txId = contractTxId(target);
-  const awt = await connectAWTContract(arweave, wallet, txId, target);
+  const atw = await connectATWContract(arweave, wallet, txId, target);
 
-  const { originalTxId } = await awt.registerUploader({ friendlyName: 'bob' });
+  const { originalTxId } = await atw.registerUploader({ friendlyName: 'bob' });
 
   await mineBlock(arweave);
-  const state = await awt.currentState();
+  const state = await atw.currentState();
 
   console.log('Updated state:', state);
   console.log('Contract tx id', txId);
@@ -32,9 +32,9 @@ module.exports.requestArchiving = async function (host, port, protocol, target, 
   const wallet = await loadWallet(arweave, walletJwk, target, true);
   const walletAddr = await walletAddress(arweave, wallet);
   const txId = contractTxId(target);
-  const awt = await connectAWTContract(arweave, wallet, txId, target);
+  const atw = await connectATWContract(arweave, wallet, txId, target);
 
-  const { originalTxId } = await awt.requestArchiving({
+  const { originalTxId } = await atw.requestArchiving({
     options: { depth: 0, urls: ['https://example.com'], domainOnly: false },
     // for about a day
     endTimestamp: Math.floor(Date.now() / 1000) + 100000,
@@ -45,7 +45,7 @@ module.exports.requestArchiving = async function (host, port, protocol, target, 
   });
 
   await mineBlock(arweave);
-  const state = await awt.currentState();
+  const state = await atw.currentState();
 
   console.log('Updated state:', state);
   console.log('Contract tx id', txId);
@@ -64,12 +64,12 @@ module.exports.submitArchive = async function (host, port, protocol, target, wal
   const wallet = await loadWallet(arweave, walletJwk, target, true);
   const walletAddr = await walletAddress(arweave, wallet);
   const txId = contractTxId(target);
-  const awt = await connectAWTContract(arweave, wallet, txId, target);
+  const atw = await connectATWContract(arweave, wallet, txId, target);
 
-  let beginState = await awt.currentState();
+  let beginState = await atw.currentState();
   let key = Object.keys(beginState.archiveRequests)[0];
 
-  const { originalTxId } = await awt.submitArchive({
+  const { originalTxId } = await atw.submitArchive({
     archiveRequestId: key,
     arweaveTx: 'string',
     fullUrl: 'https://example.com',
@@ -79,7 +79,7 @@ module.exports.submitArchive = async function (host, port, protocol, target, wal
   });
 
   await mineBlock(arweave);
-  const state = await awt.currentState();
+  const state = await atw.currentState();
 
   console.log('Updated state:', state);
   console.log('Contract tx id', txId);

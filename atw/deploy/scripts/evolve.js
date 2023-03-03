@@ -4,7 +4,7 @@ const { mineBlock } = require('./utils/mine-block');
 const { loadWallet, walletAddress } = require('./utils/load-wallet');
 const { connectArweave } = require('./utils/connect-arweave');
 const { contractTxId } = require('./utils/contract-tx-id');
-const { connectAWTContract } = require('./utils/connect-awt-contract');
+const { connectATWContract } = require('./utils/connect-atw-contract');
 const { getWarpInstance } = require('./deploy');
 
 module.exports.evolve = async function (host, port, protocol, target, walletJwk) {
@@ -13,7 +13,7 @@ module.exports.evolve = async function (host, port, protocol, target, walletJwk)
   const wallet = await loadWallet(arweave, walletJwk, target, true);
   const contractSrc = fs.readFileSync(path.join(__dirname, '../../contract/implementation/pkg/rust-contract_bg.wasm'));
   const txId = contractTxId(target);
-  const awt = await connectAWTContract(arweave, wallet, txId, target);
+  const atw = await connectATWContract(arweave, wallet, txId, target);
 
   const srcTx = await warp.createSourceTx(
     {
@@ -25,13 +25,13 @@ module.exports.evolve = async function (host, port, protocol, target, walletJwk)
   );
   const newContractTxId = await warp.saveSourceTx(srcTx);
 
-  await awt.evolve({ value: newContractTxId });
+  await atw.evolve({ value: newContractTxId });
 
   if (target == 'testnet' || target == 'local') {
     await mineBlock(arweave);
   }
 
-  let afterState = await awt.currentState();
+  let afterState = await atw.currentState();
   console.log('new evolve:', afterState.evolve);
 
   if (target == 'testnet') {

@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2021 RedStone Finance
+Copyright (c) 2023 Archive The Web
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

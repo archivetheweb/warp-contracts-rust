@@ -97,7 +97,6 @@ pub enum Action {
     SubmitArchive(SubmitArchive),
     DeleteArchiveRequest(DeleteArchiveRequest),
     Evolve(Evolve),
-    UpgradeState(UpgradeState),
 
     // Read
     ArchivesByURL(ArchivesByURL),
@@ -136,7 +135,7 @@ pub enum WriteAction {
     DeRegisterUploader(DeRegisterUploader),
 
     Evolve(Evolve),
-    UpgradeState(UpgradeState),
+    // UpgradeState(UpgradeState),
 }
 
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]

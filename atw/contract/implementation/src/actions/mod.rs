@@ -14,7 +14,6 @@ pub mod read_archives_by_url;
 pub mod read_archives_by_url_and_timestamp;
 pub mod read_get_archives;
 
-pub mod upgrade_state;
 
 pub trait Actionable {
     fn action(self, caller: String, state: State) -> ActionResult;

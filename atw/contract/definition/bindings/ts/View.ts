@@ -44,9 +44,8 @@ export interface ArchiveSubmission {
   uploaderAddress: string;
 }
 export interface ArchiveOptions {
-  crawlType?: CrawlType | null;
+  crawlType: CrawlType;
   depth: number;
-  domainOnly?: boolean | null;
 }
 export interface ArchiveRequestsFor {
   address: string;
@@ -65,9 +64,8 @@ export interface ArchiveRequest {
   uploaderAddress: string;
 }
 export interface ArchiveRequestOptions {
-  crawlType?: CrawlType | null;
+  crawlType: CrawlType;
   depth: number;
-  domainOnly?: boolean | null;
   urls: string[];
 }
 export interface ArchiveRequestByID {

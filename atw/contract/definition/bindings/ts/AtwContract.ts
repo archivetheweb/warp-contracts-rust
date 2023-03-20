@@ -30,8 +30,7 @@ import {
   SubmitArchive,
   DeleteArchiveRequest,
   DeRegisterUploader,
-  Evolve,
-  UpgradeState
+  Evolve
 } from './WriteAction';
 import { State } from './ContractState';
 
@@ -180,15 +179,5 @@ export class AtwContract {
 
   async evolve(evolve: Evolve, options?: WriteInteractionOptions): Promise<WriteInteractionResponse | null> {
     return await this.contract.writeInteraction<BaseInput & Evolve>({ function: 'evolve', ...evolve }, options);
-  }
-
-  async upgradeState(
-    upgradeState: UpgradeState,
-    options?: WriteInteractionOptions
-  ): Promise<WriteInteractionResponse | null> {
-    return await this.contract.writeInteraction<BaseInput & UpgradeState>(
-      { function: 'upgradeState', ...upgradeState },
-      options
-    );
   }
 }

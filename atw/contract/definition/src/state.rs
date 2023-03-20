@@ -38,11 +38,12 @@ pub struct ArchiveRequest {
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct ArchiveRequestOptions {
-    pub urls: Vec<String>, // list of urls to archive
-    pub depth: u8,         // depth of the crawl
-    // still need this as it's part of state - will need to remove
+    pub urls: Vec<String>,     // list of urls to archive
+    pub depth: u8,             // depth of the crawl
+    pub crawl_type: CrawlType, // type of crawl
+    #[serde(skip)]
+    // DO NOT REMOVE THIS FIELD - it's used to migrate the state
     pub domain_only: Option<bool>,
-    pub crawl_type: Option<CrawlType>, // type of crawl
 }
 
 // CrawlType is the type of crawl to perform. Do not change the order of this enum
@@ -61,9 +62,10 @@ pub enum CrawlType {
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct ArchiveOptions {
-    pub depth: u8,                     // depth of the crawl
-    pub crawl_type: Option<CrawlType>, // type of crawl (option for now)
-    // still need this as it's part of state - will need to remove
+    pub depth: u8,             // depth of the crawl
+    pub crawl_type: CrawlType, // type of crawl (option for now)
+    #[serde(skip)]
+    // DO NOT REMOVE THIS FIELD - it's used to migrate the state
     pub domain_only: Option<bool>, // whether we want a domain only crawl
 }
 

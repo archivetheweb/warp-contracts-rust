@@ -16,6 +16,16 @@ impl Actionable for UpgradeState {
                 archive_submission.options.domain_only = None;
             }
         }
+
+        for (_, archive_request) in state.archive_requests.iter_mut() {
+            if archive_request.options.domain_only.unwrap() {
+                archive_request.options.crawl_type = Some(CrawlType::DomainOnly);
+            } else {
+                archive_request.options.crawl_type = Some(CrawlType::DomainAndLinks);
+            }
+            archive_request.options.domain_only = None;
+        }
+
         Ok(HandlerResult::Write(state))
     }
 }

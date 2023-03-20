@@ -23,5 +23,7 @@ pub async fn handle(state: State, action: Action) -> ActionResult {
         Action::ArchiveRequestsFor(action) => action.action(effective_caller, state),
         Action::ArchiveRequestByID(action) => action.action(effective_caller, state),
         Action::Archives(action) => action.action(effective_caller, state),
+       
+        Action::UpgradeState(action) => action.action(effective_caller, state),
     }
 }

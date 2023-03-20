@@ -35,6 +35,7 @@
     "submitArchive:local": "ts-node deploy/local/interact-submitArchive-local.js",
     "submitArchive:testnet": "ts-node deploy/testnet/interact-submitArchive-testnet.js",
     "submitArchive:mainnet": "ts-node deploy/mainnet/interact-submitArchive-mainnet.js",
+    "upgradeState:mainnet": "ts-node deploy/mainnet/interact-upgradeState-mainnet.js",
     "archiveRequestFor:local": "ts-node deploy/local/read-archiveRequestFor-local.js",
     "archiveRequestFor:testnet": "ts-node deploy/testnet/read-archiveRequestFor-testnet.js",
     "archiveRequestFor:mainnet": "ts-node deploy/mainnet/read-archiveRequestFor-mainnet.js",

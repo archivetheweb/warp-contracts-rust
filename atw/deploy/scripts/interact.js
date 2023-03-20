@@ -92,3 +92,26 @@ module.exports.submitArchive = async function (host, port, protocol, target, wal
     console.log('Transfer tx id', originalTxId);
   }
 };
+
+module.exports.upgradeState = async function (host, port, protocol, target, walletJwk) {
+  const arweave = connectArweave(host, port, protocol);
+  const wallet = await loadWallet(arweave, walletJwk, target, true);
+  const txId = contractTxId(target);
+  const atw = await connectATWContract(arweave, wallet, txId, target);
+
+  const { originalTxId } = await atw.upgradeState({});
+
+  await mineBlock(arweave);
+  const state = await atw.currentState();
+
+  console.log('Updated state:', state);
+  console.log('Contract tx id', txId);
+
+  if (target == 'testnet') {
+    console.log(
+      `Check registerUploader interaction at https://sonar.warp.cc/#/app/interaction/${originalTxId}?network=testnet`
+    );
+  } else {
+    console.log('Transfer tx id', originalTxId);
+  }
+};

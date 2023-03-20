@@ -25,6 +25,8 @@ module.exports.evolve = async function (host, port, protocol, target, walletJwk)
   );
   const newContractTxId = await warp.saveSourceTx(srcTx);
 
+  await new Promise((resolve) => setTimeout(resolve, 10000));
+
   await atw.evolve({ value: newContractTxId });
 
   if (target == 'testnet' || target == 'local') {

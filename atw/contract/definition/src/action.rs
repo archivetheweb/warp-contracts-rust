@@ -4,8 +4,8 @@ use strum_macros::EnumIter;
 
 use crate::error::ContractError;
 use crate::state::{
-    ArchiveInfo, ArchiveOptions, ArchiveRequest, ArchiveSubmission, ArchivesByURLInfo, Options,
-    State,
+    ArchiveInfo, ArchiveOptions, ArchiveRequest, ArchiveRequestOptions, ArchiveSubmission,
+    ArchivesByURLInfo, State,
 };
 
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
@@ -28,6 +28,10 @@ pub struct Archives {}
 
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
 #[serde(rename_all = "camelCase")]
+pub struct UpgradeState {}
+
+#[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
+#[serde(rename_all = "camelCase")]
 pub struct ArchiveRequestsFor {
     pub address: String,
 }
@@ -45,7 +49,7 @@ pub struct DeRegisterUploader {}
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct RequestArchiving {
-    pub options: Options,
+    pub options: ArchiveRequestOptions,
     pub uploader_address: String, // uploader for this pool
     pub start_timestamp: i64, // start_timestamp of the period where we want to archive the website
     pub end_timestamp: i64,   // end_timestamp
@@ -93,6 +97,7 @@ pub enum Action {
     SubmitArchive(SubmitArchive),
     DeleteArchiveRequest(DeleteArchiveRequest),
     Evolve(Evolve),
+    UpgradeState(UpgradeState),
 
     // Read
     ArchivesByURL(ArchivesByURL),
@@ -131,6 +136,7 @@ pub enum WriteAction {
     DeRegisterUploader(DeRegisterUploader),
 
     Evolve(Evolve),
+    UpgradeState(UpgradeState),
 }
 
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]

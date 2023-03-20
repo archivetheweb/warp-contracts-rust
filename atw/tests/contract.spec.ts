@@ -3,10 +3,11 @@ import fs from 'fs';
 import ArLocal from 'arlocal';
 import Arweave from 'arweave';
 import { JWKInterface } from 'arweave/node/lib/wallet';
-import { InteractionResult, LoggerFactory, Warp, SmartWeaveTags, WarpFactory, TagsParser } from 'warp-contracts';
+import { LoggerFactory, Warp, SmartWeaveTags, WarpFactory, TagsParser } from 'warp-contracts';
 import path from 'path';
 import { AtwContract } from '../contract/definition/bindings/ts/AtwContract';
 import { State } from '../contract/definition/bindings/ts/ContractState';
+import { ArchiveSubmission } from '../contract/definition/bindings/ts/View';
 
 jest.setTimeout(30000);
 
@@ -26,16 +27,19 @@ describe('Testing the ATW Contract', () => {
 
   let tagsParser;
 
-  let archiveSubmission = {
+  let archiveSubmission: ArchiveSubmission = {
     options: {
-      depth: 0, // depth of the crawl
-      domainOnly: false // whether we want a domain only crawl
+      depth: 0,
+      crawlType: 'domainOnly' // whether we want a domain only crawl
     },
     arweaveTx: '',
     fullUrl: 'https://example.com?hello=hi',
     size: 1,
     timestamp: 1,
-    archiveRequestId: ''
+    archiveRequestId: '',
+    screenshotTx: '',
+    title: '',
+    uploaderAddress: ''
   };
 
   beforeAll(async () => {
@@ -123,15 +127,15 @@ describe('Testing the ATW Contract', () => {
 
   it('should add archiving request', async () => {
     await atwContract.requestArchiving({
-      crawlOptions: {
+      options: {
         urls: ['https://example.com'],
         depth: 0, // depth of the crawl
-        domainOnly: false // whether we want a domain only crawl
+        crawlType: 'domainOnly' // whether we want a domain only crawl
       },
       uploaderAddress: walletAddress, // uploader for this pool
       startTimestamp: Math.floor(Date.now() / 1000), // start_timestamp of the period where we want to archive the website
-      endTimestamp: Math.floor(Date.now() / 1000), // end_timestamp
-      frequency: 'cron:0 * * * * * '
+      endTimestamp: Math.floor(Date.now() / 1000) + 60, // end_timestamp
+      frequency: '0 * * * * * '
     });
     const state = await atwContract.currentState();
 
@@ -171,7 +175,7 @@ describe('Testing the ATW Contract', () => {
 
     expect(Object.keys(state.archives['example.com']).length - beginCount).toEqual(1);
 
-    expect(state.archiveRequests[archiveRequestId].latestUploadTimestamp).toEqual(ts);
+    expect(state.archiveRequests[archiveRequestId].latestArchivedTimestamp).toEqual(ts);
 
     expect(state.archives['example.com'][ts]).toBeDefined();
   });
@@ -182,15 +186,15 @@ describe('Testing the ATW Contract', () => {
 
     // we create an archive request
     let { originalTxId } = await atwContract.requestArchiving({
-      crawlOptions: {
+      options: {
         urls: ['https://example.com'],
         depth: 0, // depth of the crawl
-        domainOnly: false // whether we want a domain only crawl
+        crawlType: 'domainOnly'
       },
       uploaderAddress: walletAddress, // uploader for this pool
       startTimestamp: Math.floor(Date.now() / 1000) - 2000, // start_timestamp of the period where we want to archive the website
       endTimestamp: Math.floor(Date.now() / 1000) - 1000, // end_timestamp
-      frequency: 'cron:0 * * * * * '
+      frequency: '0 * * * * * '
     });
 
     await atwContract.deleteArchiveRequest({

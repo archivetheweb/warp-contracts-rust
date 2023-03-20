@@ -26,7 +26,7 @@ pub enum ContractState {
 #[serde(rename_all = "camelCase")]
 pub struct ArchiveRequest {
     pub id: String,
-    pub options: Options,
+    pub options: ArchiveRequestOptions,
     pub uploader_address: String,       // uploader for this pool
     pub start_timestamp: i64, // start_timestamp of the period where we want to archive the website
     pub end_timestamp: i64,   // end_timestamp
@@ -37,17 +37,34 @@ pub struct ArchiveRequest {
 
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
 #[serde(rename_all = "camelCase")]
-pub struct Options {
-    pub urls: Vec<String>,
+pub struct ArchiveRequestOptions {
+    pub urls: Vec<String>, // list of urls to archive
     pub depth: u8,         // depth of the crawl
-    pub domain_only: bool, // whether we want a domain only crawl
+    // still need this as it's part of state - will need to remove
+    pub domain_only: Option<bool>,
+    pub crawl_type: Option<CrawlType>, // type of crawl
+}
+
+// CrawlType is the type of crawl to perform. Do not change the order of this enum
+#[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
+#[serde(rename_all = "camelCase")]
+pub enum CrawlType {
+    // Crawl only links on the same domain as the starting URL.
+    #[default]
+    DomainOnly,
+    // Crawls all links on the same domain and links on the page (depth 1)
+    DomainWithPageLinks,
+    // Crawls all links on the same domain and links on the page, going down the tree
+    DomainAndLinks,
 }
 
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct ArchiveOptions {
-    pub depth: u8,         // depth of the crawl
-    pub domain_only: bool, // whether we want a domain only crawl
+    pub depth: u8,                     // depth of the crawl
+    pub crawl_type: Option<CrawlType>, // type of crawl (option for now)
+    // still need this as it's part of state - will need to remove
+    pub domain_only: Option<bool>, // whether we want a domain only crawl
 }
 
 #[derive(JsonSchema, Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq, Default)]
